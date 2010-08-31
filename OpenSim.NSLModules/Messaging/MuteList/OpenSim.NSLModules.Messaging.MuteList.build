@@ -5,7 +5,7 @@
 	<property name="referdir" value="../../../../bin"/>
 
 	<target name="build">
-		<csc target="library" output="${basename}.dll" warnaserror="False">
+		<csc target="library" output="../../../bin/${basename}.dll" warnaserror="False">
 			<sources>
 				<!--
 				<include name="Properties/AssemblyInfo.cs "/>
