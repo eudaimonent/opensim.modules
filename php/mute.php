@@ -91,15 +91,20 @@ if ($method == "/RequestList/") {
 	$parms = $HTTP_RAW_POST_DATA;
 	$parts = split("[<>]", $parms);
 	$agent_id = $parts[6];
-	   
-	echo '<?xml version="1.0" encoding="utf-8"?>';
-	echo '<ArrayOfGridMuteList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+	$query_str = "";
+	$errno = -1;
 
 	if (isGUID($agent_id)) {
 		$query_str = "SELECT AgentID,MuteID,MuteName,MuteType,MuteFlags,Timestamp FROM ".MUTE_LIST_TBL." WHERE AgentID='".$agent_id."'";
 		$DbLink->query($query_str);
+		$errno = $DbLink->Errno;
+	}
+	//error_log("mute.php: RequestList Query = ".$query_str);
 
-		//error_log("mute.php: RequestList Query = ".$query_str);
+	echo '<?xml version="1.0" encoding="utf-8"?>';
+	echo '<ArrayOfGridMuteList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
+
+	if ($errno==0) {
 		while(list($agentID, $muteID, $muteName, $muteType, $muteFlags, $timestamp) = $DbLink->next_record()) {
  			echo '<GridMuteList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">';
 			echo   '<agentID>'.  $agentID.  '</agentID>';
