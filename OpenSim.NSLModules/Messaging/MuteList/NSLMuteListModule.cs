@@ -95,36 +95,6 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 		}
 
 
-/*
-		public void AddRegion(Scene scene)
-		{
-			if (!m_enabled) return;
-
-			lock (m_SceneList)
-			{
-				m_SceneList.Add(scene);
-				scene.EventManager.OnNewClient += OnNewClient;
-			}
-		}
-
-
-		public void RegionLoaded(Scene scene)
-		{
-		}
-
-
-		public void RemoveRegion(Scene scene)
-		{
-			if (!m_enabled) return;
-
-			lock (m_SceneList)
-			{
-				m_SceneList.Remove(scene);
-			}
-		}
-*/
-
-
 		public void PostInitialise()
 		{
 			if (!m_enabled) return;
@@ -138,14 +108,6 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			get { return "NSLMuteListModule"; }
 		}
 
-
-/*
-		public Type ReplaceableInterface
-		{
-			get { return null; }
-		}
-*/
-		
 
 		public void Close()
 		{
@@ -186,7 +148,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 
 	  	public void OnUpdateMuteListEntry(IClientAPI client, UUID MuteID, string Name, int Type, UUID AgentID) 
 	   	{
-			m_log.DebugFormat("[NSL MUTE LIST] OnUpdateMuteListEntry {0}, {1}, {2}, {3}", MuteID.ToString(), Name, Type.ToString(), AgentID.ToString());
+			//m_log.DebugFormat("[NSL MUTE LIST] OnUpdateMuteListEntry {0}, {1}, {2}, {3}", MuteID.ToString(), Name, Type.ToString(), AgentID.ToString());
 
 	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, Type);
 			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/UpdateList/", ml);
@@ -195,7 +157,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 
 	   	public void OnRemoveMuteListEntry(IClientAPI client, UUID MuteID, string Name, UUID AgentID)
 	   	{
-			m_log.DebugFormat("[NSL MUTE LIST] OnRemoveMuteListEntry {0}, {1}, {2}", MuteID.ToString(), Name, AgentID.ToString());
+			//m_log.DebugFormat("[NSL MUTE LIST] OnRemoveMuteListEntry {0}, {1}, {2}", MuteID.ToString(), Name, AgentID.ToString());
 
 	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name);
 			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/DeleteList/", ml);
@@ -204,7 +166,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 
 		private void OnMuteListRequest(IClientAPI client, uint crc)
 		{
-			m_log.DebugFormat("[NSL MUTE LIST] Got MUTE LIST request for crc {0}", crc);
+			//m_log.DebugFormat("[NSL MUTE LIST] Got MUTE LIST request for crc {0}", crc);
 
 			int cnt = 0;
 			string str = "";
