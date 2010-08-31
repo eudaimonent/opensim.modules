@@ -90,7 +90,6 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			if (!m_SceneList.Contains(scene)) m_SceneList.Add(scene);
 			m_config = config;
    
-			// Hook up events
 			scene.EventManager.OnNewClient += OnNewClient;
 		}
 
@@ -135,7 +134,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 
 		private void OnNewClient(IClientAPI client)
 		{
-			client.OnMuteListRequest += OnMuteListRequest;
+			client.OnMuteListRequest 	 += OnMuteListRequest;
 			client.OnUpdateMuteListEntry += OnUpdateMuteListEntry; 
 			client.OnRemoveMuteListEntry += OnRemoveMuteListEntry;
 		}
@@ -193,7 +192,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			IXfer xfer = client.Scene.RequestModuleInterface<IXfer>();
 			if (xfer != null)
 			{
- 				byte[] byteArray = System.Text.Encoding.Default.GetBytes(str);
+ 				byte[] byteArray = System.Text.Encoding.GetEncoding("UTF-8").GetBytes(str);
 				xfer.AddNewFile(filename, byteArray);
 				client.SendMuteListUpdate(filename);
 			}
