@@ -42,7 +42,7 @@ if ($method == "/UpdateList/") {
 		$timestamp  = $parts[24];
 
 		if (isGUID($agent_id) and isGUID($mute_id) and isNumeric($mute_type) and isNumeric($mute_flags) and isNumeric($timestamp)) {
-			$query_str = "INSERT INTO ".MUTE_LIST_TBL." (AgentID,MuteID,MuteName,MuteType,MuteFlags,Timestamp) ".
+			$query_str = "INSERT INTO ".MUTE_LIST_TBL." (agentID,muteID,muteName,muteType,muteFlags,timestamp) ".
 							"VALUES ('".$agent_id."','".$mute_id."','".mysql_escape_string($mute_name)."','".$mute_type."','".$mute_flags."','".$timestamp."')";
 			$DbLink->query($query_str);
 
@@ -71,7 +71,7 @@ if ($method == "/DeleteList/") {
 
 		if (isGUID($agent_id) and isGUID($mute_id)) {
 			$query_str = "DELETE FROM ".MUTE_LIST_TBL.
-							" WHERE AgentID='".$agent_id."' and MuteID='".$mute_id."' and MuteName='".mysql_escape_string($mute_name)."'";
+							" WHERE agentID='".$agent_id."' and muteID='".$mute_id."' and muteName='".mysql_escape_string($mute_name)."'";
 			$DbLink->query($query_str);
 
 			//error_log("mute.php: DeleteList Query = ".$query_str);
@@ -95,7 +95,7 @@ if ($method == "/RequestList/") {
 	$errno = -1;
 
 	if (isGUID($agent_id)) {
-		$query_str = "SELECT AgentID,MuteID,MuteName,MuteType,MuteFlags,Timestamp FROM ".MUTE_LIST_TBL." WHERE AgentID='".$agent_id."'";
+		$query_str = "SELECT agentID,muteID,muteName,muteType,muteFlags,timestamp FROM ".MUTE_LIST_TBL." WHERE agentID='".$agent_id."'";
 		$DbLink->query($query_str);
 		$errno = $DbLink->Errno;
 	}
