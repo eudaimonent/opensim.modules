@@ -219,7 +219,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 		public GridMuteList(UUID _uuid, UUID _mute, string _name, int _type=0, int _flags=0)
 		{
 			agentID	  = _uuid.Guid;
-			muteID	= _mute.Guid;
+			muteID	  = _mute.Guid;
 			muteName  = _name;
 			muteType  = _type;
 			muteFlags = _flags;
