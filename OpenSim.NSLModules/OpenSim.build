@@ -73,11 +73,11 @@
         </fileset>
         </delete>
         <delete dir="${obj.dir}" failonerror="false" />
-        <nant buildfile="OpenSim.NSLModules/Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="clean" />
+        <nant buildfile="Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="clean" />
     </target>
 
     <target name="build" depends="init" description="">
-        <nant buildfile="OpenSim.NSLModules/Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="build" />
+        <nant buildfile="Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="build" />
     </target>
 
     <target name="build-release" depends="Release, init, build" description="Builds in Release mode" />
@@ -88,7 +88,7 @@
 
     <target name="doc" depends="build-release">
         <echo message="Generating all documentation from all builds" />
-        <nant buildfile="OpenSim.NSLModules/Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="doc" />
+        <nant buildfile="Messaging/MuteList/OpenSim.NSLModules.Messaging.MuteList.dll.build" target="doc" />
     </target>
 
 </project>
