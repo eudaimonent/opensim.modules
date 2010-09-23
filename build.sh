@@ -23,35 +23,48 @@ cd $NMDIR
 
 
 # OS Profile
+PROFDIR="N"
+PROFMOD="OpenSimProfile.Modules.dll"
+
 if [ -d ../opensim.osprofile ]; then
 	cd ../opensim.osprofile
-	./build.sh
-	cp bin/*.dll $NMDIR/bin
-	cd $NMDIR
+	PROFDIR="Y"
 elif [ -d ../osprofile ]; then
 	cd ../osprofile
-	./build.sh
-	cp bin/*.dll $NMDIR/bin
+	PROFDIR="Y"
+fi
+
+if [ "$PROFDIR" = "Y" ]; then
+	if [ ! -f bin/$PROFMOD ]; then
+		./build.sh
+	fi
+	cp bin/$PROFMOD $NMDIR/bin
 	cd $NMDIR
 fi
 
-pwd
 
 # OS Search
+SRCHDIR="N"
+SRCHMOD="OpenSimSearch.Modules.dll"
+
 if [ -d ../opensim.ossearch ]; then
 	cd ../opensim.ossearch
-	./build.sh
-	cp bin/*.dll $NMDIR/bin
-	cd $NMDIR
+	SRCHDIR="Y"
 elif [ -d ../ossearch ]; then
 	cd ../ossearch
-	./build.sh
-	cp bin/*.dll $NMDIR/bin
+	SRCHDIR="Y"
+fi
+
+if [ $SRCHDIR = "Y" ]; then
+	if [ ! -f bin/$SRCHMOD ]; then
+		./build.sh
+	fi
+	cp bin/$SRCHMOD $NMDIR/bin
 	cd $NMDIR
 fi
 
 
-cp -f bin/*.dll ../bin/
+cp -f bin/*.dll ../bin
 ls -l bin/*.dll
 echo
 
