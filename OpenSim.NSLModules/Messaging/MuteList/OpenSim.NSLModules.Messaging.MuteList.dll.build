@@ -22,28 +22,28 @@
 					  <include name="${project::get-base-directory()}" />
 					  <include name="${project::get-base-directory()}/../../../../bin" />
 				  </lib>
-                <include name="Axiom.MathLib.dll.dll" />
-                <include name="log4net.dll.dll" />
-                <include name="Nini.dll.dll" />
-                <include name="OpenMetaverse.dll.dll" />
-                <include name="OpenMetaverseTypes.dll.dll" />
-                <include name="OpenSim.Data.dll" />
-                <include name="OpenSim.Framework.dll" />
-                <include name="OpenSim.Framework.Communications.dll" />
-                <include name="OpenSim.Framework.Console.dll" />
-                <include name="OpenSim.Framework.Servers.dll" />
-                <include name="OpenSim.Framework.Servers.HttpServer.dll" />
-                <include name="OpenSim.Framework.Statistics.dll" />
+                <include name="../../../../bin/Axiom.MathLib.dll" />
+                <include name="../../../../bin/log4net.dll" />
+                <include name="../../../../bin/Nini.dll" />
+                <include name="../../../../bin/OpenMetaverse.dll" />
+                <include name="../../../../bin/OpenMetaverseTypes.dll" />
+                <include name="../../../../bin/OpenSim.Data.dll" />
+                <include name="../../../../bin/OpenSim.Framework.dll" />
+                <include name="../../../../bin/OpenSim.Framework.Communications.dll" />
+                <include name="../../../../bin/OpenSim.Framework.Console.dll" />
+                <include name="../../../../bin/OpenSim.Framework.Servers.dll" />
+                <include name="../../../../bin/OpenSim.Framework.Servers.HttpServer.dll" />
+                <include name="../../../../bin/OpenSim.Framework.Statistics.dll" />
                 <include name="OpenSim.Region.Environment.dll" />
-                <include name="OpenSim.Region.Framework.dll" />
-                <include name="OpenSim.Region.Physics.Manager.dll" />
-                <include name="OpenSim.Services.Interfaces.dll" />
+                <include name="../../../../bin/OpenSim.Region.Framework.dll" />
+                <include name="../../../../bin/OpenSim.Region.Physics.Manager.dll" />
+                <include name="../../../../bin/OpenSim.Services.Interfaces.dll" />
                 <include name="System.dll" />
                 <include name="System.Core.dll" />
                 <include name="System.Drawing.dll" />
                 <include name="System.Runtime.Remoting.dll" />
                 <include name="System.Xml.dll" />
-                <include name="XMLRPC.dll.dll" />
+                <include name="../../../../bin/XMLRPC.dll" />
 			  </references>
 		  </csc>
         <echo message="Copying from [${project::get-base-directory()}/${build.dir}/] to [${project::get-base-directory()}/../../../bin/" />

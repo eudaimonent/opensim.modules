@@ -51,6 +51,7 @@ elif [ -d ../ossearch ]; then
 fi
 
 
+cp -f bin/*.dll ../bin/
 ls -l bin/*.dll
-cp  -f bin/*.dll ../bin/
+echo
 
