@@ -35,7 +35,7 @@
     <Project name="OpenSim.NSLModules.Messaging.MuteList" path="Messaging/MuteList" type="Library">
       <Configuration name="Debug">
         <Options>
-          <OutputPath>../../../bin/Debug</OutputPath>
+          <OutputPath>../../../bin/</OutputPath>
         </Options>
       </Configuration>
       <Configuration name="Release">
