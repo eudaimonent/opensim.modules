@@ -12,6 +12,9 @@ echo "NSL_MODULES$VER"
 echo "=========================="
 
 
+rm -f bin/*.dll
+
+
 cd OpenSim.NSLModules$VER
 ./runprebuild.sh
 nant clean
@@ -48,5 +51,6 @@ elif [ -d ../ossearch ]; then
 fi
 
 
+ls -l bin/*.dll
 cp  -f bin/*.dll ../bin/
 
