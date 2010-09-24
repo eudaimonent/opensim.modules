@@ -15,7 +15,7 @@ NMDIR=`pwd`
 rm -f bin/*.dll
 
 
-MUTEMOD="NSLModules.MuteList.dll"
+MUTEMOD="NSLModules.Messaging.MuteList.dll"
 
 cd OpenSim.NSLModules$VER
 ./runprebuild.sh
