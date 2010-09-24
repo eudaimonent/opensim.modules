@@ -5,15 +5,17 @@ if [ "$1" != "" ]; then
 	VER="_"$1
 fi
 
-NMDIR=`pwd`
 
 echo "=========================="
 echo "NSL_MODULES$VER"
 echo "=========================="
 
 
+NMDIR=`pwd`
 rm -f bin/*.dll
 
+
+MUTEMOD="NSLModules.MuteList.dll"
 
 cd OpenSim.NSLModules$VER
 ./runprebuild.sh
@@ -21,6 +23,15 @@ nant clean
 nant
 cd $NMDIR
 
+if [ -f bin/$MUTEMOD ]; then
+	cp bin/$MUTEMOD ../bin
+fi
+
+
+
+#
+# Other External Modules
+#
 
 # OS Profile
 PROFDIR="N"
@@ -35,9 +46,7 @@ elif [ -d ../osprofile ]; then
 fi
 
 if [ "$PROFDIR" = "Y" ]; then
-	if [ ! -f bin/$PROFMOD ]; then
-		./build.sh
-	fi
+	./build.sh
 	cp bin/$PROFMOD $NMDIR/bin
 	cd $NMDIR
 fi
@@ -56,15 +65,17 @@ elif [ -d ../ossearch ]; then
 fi
 
 if [ $SRCHDIR = "Y" ]; then
-	if [ ! -f bin/$SRCHMOD ]; then
-		./build.sh
-	fi
+	./build.sh
 	cp bin/$SRCHMOD $NMDIR/bin
 	cd $NMDIR
 fi
 
 
-cp -f bin/*.dll ../bin
+
+#
+#
+#
+echo  
 ls -l bin/*.dll
 echo
 
