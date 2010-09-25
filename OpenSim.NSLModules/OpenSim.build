@@ -6,24 +6,17 @@
 	  <property name="obj.dir" value="obj" />
 	  <property name="doc.dir" value="doc" />
 	  <property name="project.main.dir" value="${project::get-base-directory()}" />
-	  <property name="project.config" value="Release" />
+    <property name="project.config" value="Release" />
 
-	  <target name="Debug" description="Debug|AnyCPU" depends="Debug-AnyCPU">
-	  </target>
-
-	  <target name="Debug-AnyCPU" description="Debug|AnyCPU">
+	  <target name="Debug" description="">
 		  <property name="project.config" value="Debug" />
 		  <property name="build.debug" value="true" />
-		  <property name="build.platform" value="AnyCPU" />
 	  </target>
 
-	  <target name="Release" description="Release|AnyCPU" depends="Release-AnyCPU">
-	  </target>
 
-	  <target name="Release-AnyCPU" description="Release|AnyCPU">
+	  <target name="Release" description="">
 		  <property name="project.config" value="Release" />
 		  <property name="build.debug" value="false" />
-		  <property name="build.platform" value="AnyCPU" />
 	  </target>
 
 	  <target name="net-1.1" description="Sets framework to .NET 1.1">
