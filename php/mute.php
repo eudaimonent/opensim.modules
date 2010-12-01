@@ -33,7 +33,8 @@ if ($method == "/UpdateList/") {
 	if ($start != -1) {
 		$start += 2;
 		$parms = substr($parms, $start);
-		$parts = split("[<>]", $parms);
+		//$parts = split("[<>]", $parms);
+		$parts = preg_split("[<>]", $parms);
 		$agent_id   = $parts[4];
 		$mute_id    = $parts[8];
 		$mute_name  = $parts[12];
@@ -64,7 +65,8 @@ if ($method == "/DeleteList/") {
 	if ($start != -1) {
 		$start += 2;
 		$parms = substr($parms, $start);
-		$parts = split("[<>]", $parms);
+		//$parts = split("[<>]", $parms);
+		$parts = preg_split("[<>]", $parms);
 		$agent_id   = $parts[4];
 		$mute_id    = $parts[8];
 		$mute_name  = $parts[12];
@@ -89,7 +91,8 @@ if ($method == "/DeleteList/") {
 
 if ($method == "/RequestList/") {
 	$parms = $HTTP_RAW_POST_DATA;
-	$parts = split("[<>]", $parms);
+	//$parts = split("[<>]", $parms);
+	$parts = preg_split("[<>]", $parms);
 	$agent_id = $parts[6];
 	$query_str = "";
 	$errno = -1;
