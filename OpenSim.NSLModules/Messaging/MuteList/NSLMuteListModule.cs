@@ -149,7 +149,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 	   	{
 			//m_log.DebugFormat("[NSL MUTE LIST] OnUpdateMuteListEntry {0}, {1}, {2}, {3}", MuteID.ToString(), Name, Type.ToString(), AgentID.ToString());
 
-	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, Type);
+	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, Type, 0);
 			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/UpdateList/", ml);
 		}
 
@@ -158,7 +158,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 	   	{
 			//m_log.DebugFormat("[NSL MUTE LIST] OnRemoveMuteListEntry {0}, {1}, {2}", MuteID.ToString(), Name, AgentID.ToString());
 
-	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name);
+	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, 0, 0);
 			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/DeleteList/", ml);
 		}
 
@@ -216,7 +216,7 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 		}
 
 
-		public GridMuteList(UUID _uuid, UUID _mute, string _name, int _type=0, int _flags=0)
+		public GridMuteList(UUID _uuid, UUID _mute, string _name, int _type, int _flags)
 		{
 			agentID	  = _uuid.Guid;
 			muteID	  = _mute.Guid;
