@@ -150,7 +150,8 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			//m_log.DebugFormat("[NSL MUTE LIST] OnUpdateMuteListEntry {0}, {1}, {2}, {3}", MuteID.ToString(), Name, Type.ToString(), AgentID.ToString());
 
 	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, Type, 0);
-			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/UpdateList/", ml);
+			//bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/UpdateList/", ml);
+			bool success = SynchronousRestObjectRequester.MakeRequest<GridMuteList, bool>("POST", m_RestURL+"/UpdateList/", ml);
 		}
 
 
@@ -159,7 +160,8 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			//m_log.DebugFormat("[NSL MUTE LIST] OnRemoveMuteListEntry {0}, {1}, {2}", MuteID.ToString(), Name, AgentID.ToString());
 
 	   		GridMuteList ml = new GridMuteList(AgentID, MuteID, Name, 0, 0);
-			bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/DeleteList/", ml);
+			//bool success = SynchronousRestObjectPoster.BeginPostObject<GridMuteList, bool>("POST", m_RestURL+"/DeleteList/", ml);
+			bool success = SynchronousRestObjectRequester.MakeRequest<GridMuteList, bool>("POST", m_RestURL+"/DeleteList/", ml);
 		}
 
 
@@ -171,9 +173,11 @@ namespace OpenSim.NSLModules.Messaging.MuteList
 			string str = "";
 			string url = m_RestURL + "/RequestList/";
 
-			List<GridMuteList> mllist = SynchronousRestObjectPoster.BeginPostObject<UUID, List<GridMuteList>>("POST", url, client.AgentId);
+			//List<GridMuteList> mllist = SynchronousRestObjectPoster.BeginPostObject<UUID, List<GridMuteList>>("POST", url, client.AgentId);
+			List<GridMuteList> mllist = SynchronousRestObjectRequester.MakeRequest<UUID, List<GridMuteList>>("POST", url, client.AgentId);
 			while (mllist==null && cnt<10) {		// retry
-				mllist = SynchronousRestObjectPoster.BeginPostObject<UUID, List<GridMuteList>>("POST", url, client.AgentId);
+				//mllist = SynchronousRestObjectPoster.BeginPostObject<UUID, List<GridMuteList>>("POST", url, client.AgentId);
+				mllist = SynchronousRestObjectRequester.MakeRequest<UUID, List<GridMuteList>>("POST", url, client.AgentId);
 				cnt++;
 			}
 
