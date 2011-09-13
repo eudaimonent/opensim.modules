@@ -65,9 +65,12 @@
         <delete failonerror="false">
         <fileset basedir="${bin.dir}">
             <include name="OpenSim*.dll"/>
+            <include name="OpenSim*.dll.mdb"/>
             <include name="OpenSim*.exe"/>
+            <include name="OpenSim*.exe.mdb"/>
             <include name="ScriptEngines/*"/>
-            <include name="Physics/*"/>
+            <include name="Physics/*.dll"/>
+            <include name="Physics/*.dll.mdb"/>
             <exclude name="OpenSim.32BitLaunch.exe"/>
             <exclude name="ScriptEngines/Default.lsl"/>
         </fileset>
