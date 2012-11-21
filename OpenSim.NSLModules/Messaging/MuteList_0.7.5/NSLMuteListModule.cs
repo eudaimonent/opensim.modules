@@ -122,7 +122,7 @@ namespace OpenSim.Modules.Messaging
 			}
 			m_config = config;
    
-			scene.EventManager.OnNewClient += OnNewClient;
+   			Enc = System.Text.Encoding.GetEncoding(encode);
 		}
 
 
@@ -136,6 +136,8 @@ namespace OpenSim.Modules.Messaging
 			if (!m_enabled) return;					 
 
 			if (!m_SceneList.Contains(scene)) m_SceneList.Add(scene);
+
+			scene.EventManager.OnNewClient += OnNewClient;
 		}
 
 
