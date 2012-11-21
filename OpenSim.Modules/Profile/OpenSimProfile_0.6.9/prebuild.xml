@@ -32,7 +32,7 @@
       </Options>
     </Configuration>
 
-    <Project name="OpenSimProfile.Modules" path="Modules/ProfileModule" type="Library">
+    <Project name="OpenSimProfile.Modules" path="Modules" type="Library">
       <Configuration name="Debug">
         <Options>
           <OutputPath>../../../bin/</OutputPath>
@@ -44,7 +44,7 @@
         </Options>
       </Configuration>
 
-      <ReferencePath>../../../../bin/</ReferencePath>
+      <ReferencePath>../../../../../bin/</ReferencePath>
       <Reference name="System" localCopy="false"/>
       <Reference name="System.Xml"/>
       <Reference name="System.Drawing"/>
@@ -65,6 +65,7 @@
       <Reference name="Nini.dll" />
       <Reference name="log4net.dll"/>
       <Reference name="XMLRPC.dll"/>
+      <Reference name="Mono.Addins.dll"/>
 
       <Files>
         <Match pattern="*.cs" recurse="true"/>
