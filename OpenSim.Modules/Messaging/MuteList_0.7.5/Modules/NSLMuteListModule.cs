@@ -49,7 +49,7 @@ using Mono.Addins;
 
 namespace OpenSim.Modules.Messaging
 {
-	[Extension(Path = "/OpenSim/Region/Modules", NodeName = "RegionModule", Id = "MuteListModule")]
+	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MuteListModule")]
 	public class NSLMuteListModule : ISharedRegionModule
 	{
         private string encode = "UTF-8";
