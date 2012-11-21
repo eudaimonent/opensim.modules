@@ -9,12 +9,10 @@ echo "=========================="
 echo "OpenSimSearch$VER"
 echo "=========================="
 
+./clean
+
 cd OpenSimSearch$VER
 ./runprebuild.sh
 nant clean
 nant
-
-if [ -f ../bin/OpenSimSearch.Modules.dll ]; then
-	cp -f ../bin/OpenSimSearch.Modules.dll ../../bin/
-fi
 

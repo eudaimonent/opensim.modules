@@ -9,6 +9,8 @@ echo "=========================="
 echo "OpenSimProfile$VER"
 echo "=========================="
 
+./clean
+
 cd OpenSimProfile$VER
 ./runprebuild.sh
 nant clean
