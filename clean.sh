@@ -4,4 +4,7 @@ find . -name "*~"|xargs rm -f
 
 rm -f bin/*.dll
 
-rm -f OpenSim.NSLModules/Messaging/MuteList/NSLModules.Messaging.MuteList.dll.build
+(cd OpenSim.Modules/Messaging && ./clean)
+(cd OpenSim.Modules/Profile && ./clean)
+(cd OpenSim.Modules/Search && ./clean)
+#(cd OpenSim.Modules/Physics && ./clean)

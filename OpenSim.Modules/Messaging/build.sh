@@ -6,10 +6,10 @@ if [ "$1" != "" ]; then
 fi
 
 echo "=========================="
-echo "OpenSimProfile$VER"
+echo "MuteList$VER"
 echo "=========================="
 
-cd OpenSimProfile$VER
+cd MuteList$VER
 ./runprebuild.sh
 nant clean
 nant

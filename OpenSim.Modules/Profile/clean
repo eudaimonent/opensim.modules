@@ -2,5 +2,6 @@
 
 find . -name "*~"|xargs rm -f 
 
-rm -f bin/*.dll
-rm -f OpenSimProfile*/Modules/ProfileModule/OpenSimProfile.Modules.dll.build
+rm -f  OpenSimProfile*/*.build
+rm -f  OpenSimProfile*/Modules/*.build
+rm -rf OpenSimProfile*/Modules/bin
