@@ -1,81 +1,48 @@
 #!/bin/sh
 
-VER=""
-if [ "$1" != "" ]; then
-	VER="_"$1
+VER=$1
+DVER=""
+if [ "$VER" != "" ]; then
+	DVER="_"$VER
 fi
 
 
 echo "=========================="
-echo "NSL_MODULES$VER"
+echo "NSL_MODULES$DVER"
 echo "=========================="
 
 
+BASEDIR=OpenSim.Modules
 NMDIR=`pwd`
 rm -f bin/*.dll
 
 
-MUTEMOD="NSLModules.Messaging.MuteList.dll"
+# MuteList
+cd $BASEDIR/Messaging
+./build.sh $VER
+cd ../..
 
-cd OpenSim.NSLModules$VER
-./runprebuild.sh
-nant clean
-nant
-cd $NMDIR
-
-if [ -f bin/$MUTEMOD ]; then
-	cp bin/$MUTEMOD ../bin
-fi
-
-
-
-#
-# Other External Modules
-#
 
 # OS Profile
-PROFDIR="N"
-PROFMOD="OpenSimProfile.Modules.dll"
-
-if [ -d ../opensim.osprofile ]; then
-	cd ../opensim.osprofile
-	PROFDIR="Y"
-elif [ -d ../osprofile ]; then
-	cd ../osprofile
-	PROFDIR="Y"
-fi
-
-if [ "$PROFDIR" = "Y" ]; then
-	./build.sh
-	cp bin/$PROFMOD $NMDIR/bin
-	cd $NMDIR
-fi
+cd $BASEDIR/Profile
+./build.sh $VER
+cd ../..
 
 
 # OS Search
-SRCHDIR="N"
-SRCHMOD="OpenSimSearch.Modules.dll"
+cd $BASEDIR/Search
+./build.sh $VER
+cd ../..
 
-if [ -d ../opensim.ossearch ]; then
-	cd ../opensim.ossearch
-	SRCHDIR="Y"
-elif [ -d ../ossearch ]; then
-	cd ../ossearch
-	SRCHDIR="Y"
-fi
 
-if [ $SRCHDIR = "Y" ]; then
-	./build.sh
-	cp bin/$SRCHMOD $NMDIR/bin
-	cd $NMDIR
-fi
-
+# Physics
+cd $BASEDIR/Physics
+#./build.sh $VER
+cd ../..
 
 
 #
 #
 #
-echo  
-ls -l bin/*.dll
 echo
 
