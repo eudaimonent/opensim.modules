@@ -9,6 +9,8 @@ echo "=========================="
 echo "MuteList$VER"
 echo "=========================="
 
+./clean
+
 cd MuteList$VER
 ./runprebuild.sh
 nant clean

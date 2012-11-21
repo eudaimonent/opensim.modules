@@ -1,5 +1,5 @@
 
-if exist ..\..\Aurora\nul goto AURORA 
+if exist ..\..\..\..\Aurora\nul goto AURORA 
 
 
 :OPENSIM
