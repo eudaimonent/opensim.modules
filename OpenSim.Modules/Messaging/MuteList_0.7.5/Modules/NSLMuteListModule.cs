@@ -34,23 +34,29 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+
 using log4net;
 using Nini.Config;
+using Mono.Addins;
 using OpenMetaverse;
+
 using OpenSim.Framework;
 using OpenSim.Framework.Servers;
 using OpenSim.Framework.Servers.HttpServer;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 
-using Mono.Addins;
+
+
+[assembly: Addin("MuteListModule", "0.1")]
+[assembly: AddinDependency("OpenSim", "0.5")]
 
 
 
 namespace OpenSim.Modules.Messaging
 {
 	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "MuteListModule")]
-	public class NSLMuteListModule : ISharedRegionModule
+	public class MuteListModule : ISharedRegionModule
 	{
         private string encode = "UTF-8";
         private System.Text.Encoding Enc = null;
