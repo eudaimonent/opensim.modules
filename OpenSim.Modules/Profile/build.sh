@@ -18,7 +18,7 @@ cd OpenSimProfile$VER
 nant clean
 nant
 
-cp -f ../bin/$DLL ../../../bin
+cp -f ../../bin/$DLL ../../../../bin || exit 1
 
 echo
 

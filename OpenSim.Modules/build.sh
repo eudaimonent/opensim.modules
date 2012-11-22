@@ -17,22 +17,22 @@ rm -f bin/*.dll
 
 # MuteList
 cd Messaging
-./build.sh $VER
+./build.sh $VER || exit 1
 cd ..
 
 # OS Profile
 cd Profile
-./build.sh $VER
+./build.sh $VER || exit 1
 cd ..
 
 # OS Search
 cd Search
-./build.sh $VER
+./build.sh $VER || exit 1
 cd ..
 
 # Physics
 cd Physics
-#./build.sh $VER
+#./build.sh $VER || exit 1
 cd ..
 
 
