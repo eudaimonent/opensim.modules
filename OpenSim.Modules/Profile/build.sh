@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DLL=OpenSimProfile.Modules.dll
+
 VER=""
 if [ "$1" != "" ]; then
 	VER="_"$1
@@ -9,10 +11,14 @@ echo "=========================="
 echo "OpenSimProfile$VER"
 echo "=========================="
 
-./clean
+./clean.sh
 
 cd OpenSimProfile$VER
 ./runprebuild.sh
 nant clean
 nant
+
+cp -f ../bin/$DLL ../../../bin
+
+echo
 

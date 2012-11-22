@@ -1,5 +1,7 @@
 #!/bin/sh
 
+DLL=Messaging.NSLMuteList.dll
+
 VER=""
 if [ "$1" != "" ]; then
 	VER="_"$1
@@ -16,6 +18,7 @@ cd MuteList$VER
 nant clean
 nant
 
-if [ -f ../bin/Messaging.NSLMuteList.dll ]; then
-    cp -f ../bin/Messaging.NSLMuteList.dll ../../../bin
-fi
+cp -f ../bin/$DLL ../../../bin
+
+echo
+

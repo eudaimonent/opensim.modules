@@ -18,28 +18,24 @@ rm -f bin/*.dll
 # MuteList
 cd Messaging
 ./build.sh $VER
-cd ../..
-
+cd ..
 
 # OS Profile
 cd Profile
 ./build.sh $VER
-cd ../..
-
+cd ..
 
 # OS Search
 cd Search
 ./build.sh $VER
-cd ../..
-
+cd ..
 
 # Physics
 cd Physics
 #./build.sh $VER
-cd ../..
+cd ..
 
 
-#
 #
 #
 echo
