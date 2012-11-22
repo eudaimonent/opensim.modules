@@ -9,10 +9,13 @@ echo "=========================="
 echo "MuteList$VER"
 echo "=========================="
 
-./clean
+./clean.sh
 
 cd MuteList$VER
 ./runprebuild.sh
 nant clean
 nant
 
+if [ -f ../bin/Messaging.NSLMuteList.dll ]; then
+    cp -f ../bin/Messaging.NSLMuteList.dll ../../../bin
+fi

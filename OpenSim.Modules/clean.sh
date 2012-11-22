@@ -4,9 +4,8 @@ find . -name "*~"|xargs rm -f
 
 rm -f bin/*.dll
 
-BASEDIR=OpenSim.Modules
 
-(cd $BASEDIR/Messaging && ./clean)
-(cd $BASEDIR/Profile && ./clean)
-(cd $BASEDIR/Search && ./clean)
-(cd $BASEDIR/Physics && ./clean)
+(cd Messaging && ./clean.sh)
+(cd Profile && ./clean.sh)
+(cd Search && ./clean.sh)
+(cd Physics && ./clean.sh)

@@ -12,31 +12,29 @@ echo "NSL_MODULES$DVER"
 echo "=========================="
 
 
-BASEDIR=OpenSim.Modules
-NMDIR=`pwd`
 rm -f bin/*.dll
 
 
 # MuteList
-cd $BASEDIR/Messaging
+cd Messaging
 ./build.sh $VER
 cd ../..
 
 
 # OS Profile
-cd $BASEDIR/Profile
+cd Profile
 ./build.sh $VER
 cd ../..
 
 
 # OS Search
-cd $BASEDIR/Search
+cd Search
 ./build.sh $VER
 cd ../..
 
 
 # Physics
-cd $BASEDIR/Physics
+cd Physics
 #./build.sh $VER
 cd ../..
 
