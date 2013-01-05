@@ -37,6 +37,9 @@ cd ..
 
 
 #
+cp bin/*.dll ../bin || exit 1
+
+#
 #
 echo
 

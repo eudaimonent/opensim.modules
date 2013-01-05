@@ -18,7 +18,7 @@ cd MuteList$VER
 nant clean
 nant
 
-cp -f ../../bin/$DLL ../../../../bin || exit 1
+cp -f ../bin/$DLL ../../bin || exit 1
 
 echo
 
