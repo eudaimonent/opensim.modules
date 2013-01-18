@@ -1,7 +1,6 @@
 <?php
 
-// Please comment out the follow line, if you do not use CMS/LMS.
-if (!defined('ENV_READED_INTERFACE')) include_once('../include/env_interface.php');	// for command line
+if (!defined('ENV_READED_INTERFACE')) include_once('../include/env_interface.php');	
 
 
 if (defined('CMS_DB_HOST')) 
