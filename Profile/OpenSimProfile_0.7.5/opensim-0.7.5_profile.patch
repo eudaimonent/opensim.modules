@@ -1,0 +1,21 @@
+--- opensim-/OpenSim/Region/CoreModules/Avatar/Profile/BasicProfileModule.cs	2013-01-05 06:59:49.000000000 +0900
++++ opensim/OpenSim/Region/CoreModules/Avatar/Profile/BasicProfileModule.cs	2013-01-21 00:15:58.211259616 +0900
+@@ -57,6 +57,18 @@
+ 
+         public void Initialise(IConfigSource config)
+         {
++            IConfig profileConfig = config.Configs["Profile"];
++
++            if (profileConfig != null)
++            {
++                string module_name = profileConfig.GetString("Module");
++                if (module_name != null && module_name != Name)
++                {
++                    m_Enabled = false;
++                    return;
++                }
++            }
++
+             m_log.DebugFormat("[PROFILE MODULE]: Basic Profile Module enabled");
+             m_Enabled = true;
+         }
