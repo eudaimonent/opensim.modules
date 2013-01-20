@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `classifieds` (
   `classifiedflags` int(8) NOT NULL,
   `priceforlisting` int(5) NOT NULL,
   PRIMARY KEY (`classifieduuid`)
-) TYPE=MyISAM;
+) ENGINE=InnoDB;
 
 
 CREATE TABLE IF NOT EXISTS `usernotes` (

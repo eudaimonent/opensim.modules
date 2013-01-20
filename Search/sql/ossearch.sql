@@ -16,7 +16,7 @@
 -- Tabel structuur voor tabel `allparcels`
 -- 
 
-CREATE TABLE `allparcels` (
+CREATE TABLE IF NOT EXISTS `allparcels` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `ownerUUID` char(36) NOT NULL default '00000000-0000-0000-0000-000000000000',
@@ -27,7 +27,7 @@ CREATE TABLE `allparcels` (
   `parcelarea` int(11) NOT NULL,
   PRIMARY KEY  (`parcelUUID`),
   KEY `regionUUID` (`regionUUID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM;
 
 -- --------------------------------------------------------
 
@@ -35,7 +35,7 @@ CREATE TABLE `allparcels` (
 -- Tabel structuur voor tabel `classifieds`
 -- 
 
-CREATE TABLE `classifieds` (
+CREATE TABLE IF NOT EXISTS `classifieds` (
   `classifieduuid` char(36) NOT NULL,
   `creatoruuid` char(36) NOT NULL,
   `creationdate` int(20) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `classifieds` (
   `classifiedflags` int(8) NOT NULL,
   `priceforlisting` int(5) NOT NULL,
   PRIMARY KEY  (`classifieduuid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,7 @@ CREATE TABLE `classifieds` (
 -- Tabel structuur voor tabel `events`
 -- 
 
-CREATE TABLE `events` (
+CREATE TABLE IF NOT EXISTS `events` (
   `owneruuid` char(40) NOT NULL,
   `name` varchar(255) NOT NULL,
   `eventid` int(11) NOT NULL auto_increment,
@@ -76,7 +76,7 @@ CREATE TABLE `events` (
   `eventflags` int(10) NOT NULL,
   `mature` enum('true','false') NOT NULL,
   PRIMARY KEY  (`eventid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
@@ -84,7 +84,7 @@ CREATE TABLE `events` (
 -- Tabel structuur voor tabel `hostsregister`
 -- 
 
-CREATE TABLE `hostsregister` (
+CREATE TABLE IF NOT EXISTS `hostsregister` (
   `host` varchar(255) NOT NULL,
   `port` int(5) NOT NULL,
   `register` int(10) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `hostsregister` (
   `checked` tinyint(1) NOT NULL,
   `failcounter` int(10) NOT NULL,
   PRIMARY KEY (`host`,`port`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM; 
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE `hostsregister` (
 -- Tabel structuur voor tabel `objects`
 -- 
 
-CREATE TABLE `objects` (
+CREATE TABLE IF NOT EXISTS `objects` (
   `objectuuid` varchar(255) NOT NULL,
   `parceluuid` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `objects` (
   `description` varchar(255) NOT NULL,
   `regionuuid` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`objectuuid`,`parceluuid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM; 
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,7 @@ CREATE TABLE `objects` (
 -- Tabel structuur voor tabel `parcels`
 -- 
 
-CREATE TABLE `parcels` (
+CREATE TABLE IF NOT EXISTS `parcels` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `parcelUUID` varchar(255) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `parcels` (
   KEY `description` (`description`),
   KEY `searchcategory` (`searchcategory`),
   KEY `dwell` (`dwell`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM; 
 
 -- --------------------------------------------------------
 
@@ -141,7 +141,7 @@ CREATE TABLE `parcels` (
 -- Tabel structuur voor tabel `parcelsales`
 -- 
 
-CREATE TABLE `parcelsales` (
+CREATE TABLE IF NOT EXISTS `parcelsales` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `parcelUUID` varchar(255) NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE `parcelsales` (
   `parentestate` int(11) NOT NULL default '1',
   `mature` varchar(32) NOT NULL default 'PG',
   PRIMARY KEY  (`regionUUID`,`parcelUUID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM; 
 
 -- --------------------------------------------------------
 
@@ -161,14 +161,14 @@ CREATE TABLE `parcelsales` (
 -- Tabel structuur voor tabel `popularplaces`
 -- 
 
-CREATE TABLE `popularplaces` (
+CREATE TABLE IF NOT EXISTS `popularplaces` (
   `parcelUUID` char(36) NOT NULL,
   `name` varchar(255) NOT NULL,
   `dwell` float NOT NULL,
   `infoUUID` char(36) NOT NULL,
   `has_picture` tinyint(4) NOT NULL,
   `mature` tinyint(4) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM; 
 
 -- --------------------------------------------------------
 
@@ -176,12 +176,23 @@ CREATE TABLE `popularplaces` (
 -- Tabel structuur voor tabel `regions`
 -- 
 
-CREATE TABLE `regions` (
-  `regionname` varchar(255) NOT NULL,
-  `regionuuid` varchar(255) NOT NULL,
-  `regionhandle` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `owneruuid` varchar(255) NOT NULL,
-  PRIMARY KEY  (`regionuuid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+CREATE TABLE IF NOT EXISTS `regionsX` (
+  `uuid` varchar(36) NOT NULL,
+  `regionHandle` bigint(20) unsigned NOT NULL,
+  `regionName` varchar(128) NOT NULL,
+  `owner_uuid` varchar(36) NOT NULL,
+  PRIMARY KEY  (`uuid`)
+) ENGINE=MyISAM; 
+
+
+-- CREATE TABLE IF NOT EXISTS `regions` (
+--   `regionname` varchar(255) NOT NULL,
+--   `regionuuid` varchar(255) NOT NULL,
+--   `regionhandle` varchar(255) NOT NULL,
+--   `url` varchar(255) NOT NULL,
+--   `owner` varchar(255) NOT NULL,
+--   `owneruuid` varchar(255) NOT NULL,
+--   PRIMARY KEY  (`regionuuid`)
+-- ) ENGINE=MyISAM; 
+
+
