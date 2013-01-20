@@ -11,7 +11,7 @@ echo "=========================="
 echo "OpenSimSearch$VER"
 echo "=========================="
 
-./clean
+./clean.sh
 
 cd OpenSimSearch$VER
 ./runprebuild.sh

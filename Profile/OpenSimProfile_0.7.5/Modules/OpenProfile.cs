@@ -24,10 +24,11 @@ using OpenSim.Services.Interfaces;
 [assembly: AddinDependency("OpenSim", "0.5")]
 
 
+
 namespace OpenSim.Modules.OpenProfile
 {
 	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "OpenProfile")]
-	public class OpenProfileModule : ISharedRegionModule
+    public class OpenProfileModule : IProfileModule, ISharedRegionModule
 	{
 		private string encode = "UTF-8";
 		private	System.Text.Encoding Enc = null;
@@ -57,7 +58,7 @@ namespace OpenSim.Modules.OpenProfile
 
 		public string Name
 		{
-			get { return "ProfileModule"; }
+			get { return "OpenProfileModule"; }
 		}
 
 
@@ -80,6 +81,13 @@ namespace OpenSim.Modules.OpenProfile
 					m_Enabled = false;
 					return;
 				}
+				//
+                if (profileConfig.GetString("Module")!=Name)
+                {
+					m_Enabled = false;
+                    return;
+                }
+				//
 				m_ProfileServer = profileConfig.GetString("ProfileURL", "");
 				if (m_ProfileServer == "")
 				{
@@ -734,6 +742,7 @@ namespace OpenSim.Modules.OpenProfile
 
 				account.UserFlags &= ~0x03;
 				account.UserFlags |= userFlags;
+				//
 				remoteClient.SendAvatarProperties(avatarID, aboutText,
 						  Util.ToDateTime(account.Created).ToString(timeformat, CultureInfo.InvariantCulture),
 						  charterMember, firstLifeText,
