@@ -40,7 +40,7 @@ if (!defined('SEARCH_ALLPARCELS_TBL'))
 	define('SEARCH_PARCELS_TBL',		'parcels');
 	define('SEARCH_PARCELSALES_TBL',	'parcelsales');
 	define('SEARCH_POPULARPLACES_TBL',	'popularplaces');
-	define('SEARCH_REGIONS_TBL',		'regions');
+	define('SEARCH_REGIONS_TBL',		'search_regions');
 }
 
 ?>

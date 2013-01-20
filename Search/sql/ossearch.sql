@@ -176,23 +176,14 @@ CREATE TABLE `popularplaces` (
 -- Tabel structuur voor tabel `regions`
 -- 
 
-CREATE TABLE IF NOT EXISTS `regions` (
-  `uuid` varchar(36) NOT NULL,
-  `regionHandle` bigint(20) unsigned NOT NULL,
-  `regionName` varchar(128) NOT NULL,
-  `owner_uuid` varchar(36) NOT NULL,
-  PRIMARY KEY  (`uuid`)
+CREATE TABLE `search_regions` (
+  `regionname` varchar(255) NOT NULL,
+  `regionuuid` varchar(255) NOT NULL,
+  `regionhandle` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `owneruuid` varchar(255) NOT NULL,
+  PRIMARY KEY  (`regionuuid`)
 ) ENGINE=MyISAM; 
-
-
--- CREATE TABLE `regions` (
---   `regionname` varchar(255) NOT NULL,
---   `regionuuid` varchar(255) NOT NULL,
---   `regionhandle` varchar(255) NOT NULL,
---   `url` varchar(255) NOT NULL,
---   `owner` varchar(255) NOT NULL,
---   `owneruuid` varchar(255) NOT NULL,
---   PRIMARY KEY  (`regionuuid`)
--- ) ENGINE=MyISAM; 
 
 
