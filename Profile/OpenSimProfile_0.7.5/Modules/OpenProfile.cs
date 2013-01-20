@@ -24,7 +24,7 @@ using OpenSim.Services.Interfaces;
 [assembly: AddinDependency("OpenSim", "0.5")]
 
 
-namespace OpenSim.Monules.OpenProfile
+namespace OpenSim.Modules.OpenProfile
 {
 	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "OpenProfile")]
 	public class OpenProfileModule : ISharedRegionModule
