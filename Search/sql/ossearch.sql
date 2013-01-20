@@ -176,7 +176,7 @@ CREATE TABLE `popularplaces` (
 -- Tabel structuur voor tabel `regions`
 -- 
 
-CREATE TABLE `regionsX` (
+CREATE TABLE IF NOT EXISTS `regions` (
   `uuid` varchar(36) NOT NULL,
   `regionHandle` bigint(20) unsigned NOT NULL,
   `regionName` varchar(128) NOT NULL,
