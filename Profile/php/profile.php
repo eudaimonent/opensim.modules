@@ -7,8 +7,8 @@ require_once('./profile_config.php');
 
 
 // for Debug
-$request_xml = $HTTP_RAW_POST_DATA;
-error_log('profile.php: '.$request_xml);
+//$request_xml = $HTTP_RAW_POST_DATA;
+//error_log('profile.php: '.$request_xml);
 
 
 //
