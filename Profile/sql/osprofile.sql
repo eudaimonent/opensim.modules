@@ -1,5 +1,8 @@
+--
+--
+--
 
-CREATE TABLE IF NOT EXISTS `classifieds` (
+CREATE TABLE  IF NOT EXISTS `classifieds` (
   `classifieduuid` 	char(36) NOT NULL,
   `creatoruuid` 	char(36) NOT NULL,
   `creationdate` 	int(20) NOT NULL,
@@ -19,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `classifieds` (
 ) ENGINE=InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `usernotes` (
+CREATE TABLE `usernotes` (
   `id`              int(11) NOT NULL auto_increment,
   `useruuid`        varchar(36) NOT NULL,
   `targetuuid`      varchar(36) NOT NULL,
@@ -30,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `usernotes` (
 
 
 
-CREATE TABLE IF NOT EXISTS `userpicks` (
+CREATE TABLE `userpicks` (
   `pickuuid` 		varchar(36) NOT NULL,
   `creatoruuid` 	varchar(36) NOT NULL,
   `toppick` 		enum('true','false') NOT NULL,
@@ -48,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `userpicks` (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE IF NOT EXISTS `userprofile` (
+CREATE TABLE `userprofile` (
   `useruuid` 			 varchar(36) NOT NULL,
   `profilePartner` 		 varchar(36) NOT NULL,
   `profileImage` 		 varchar(36) NOT NULL,
@@ -67,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `userprofile` (
 ) TYPE=MyISAM;
 
 
-CREATE TABLE IF NOT EXISTS `usersettings` (
+CREATE TABLE `usersettings` (
   `useruuid` 		varchar(36) NOT NULL,
   `imviaemail` 		enum('true','false') NOT NULL,
   `visible` 		enum('true','false') NOT NULL,

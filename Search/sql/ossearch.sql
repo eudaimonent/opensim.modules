@@ -16,7 +16,7 @@
 -- Tabel structuur voor tabel `allparcels`
 -- 
 
-CREATE TABLE IF NOT EXISTS `allparcels` (
+CREATE TABLE `allparcels` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `ownerUUID` char(36) NOT NULL default '00000000-0000-0000-0000-000000000000',
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `classifieds` (
 -- Tabel structuur voor tabel `events`
 -- 
 
-CREATE TABLE IF NOT EXISTS `events` (
+CREATE TABLE `events` (
   `owneruuid` char(40) NOT NULL,
   `name` varchar(255) NOT NULL,
   `eventid` int(11) NOT NULL auto_increment,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `events` (
 -- Tabel structuur voor tabel `hostsregister`
 -- 
 
-CREATE TABLE IF NOT EXISTS `hostsregister` (
+CREATE TABLE `hostsregister` (
   `host` varchar(255) NOT NULL,
   `port` int(5) NOT NULL,
   `register` int(10) NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `hostsregister` (
 -- Tabel structuur voor tabel `objects`
 -- 
 
-CREATE TABLE IF NOT EXISTS `objects` (
+CREATE TABLE `objects` (
   `objectuuid` varchar(255) NOT NULL,
   `parceluuid` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `objects` (
 -- Tabel structuur voor tabel `parcels`
 -- 
 
-CREATE TABLE IF NOT EXISTS `parcels` (
+CREATE TABLE `parcels` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `parcelUUID` varchar(255) NOT NULL,
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `parcels` (
 -- Tabel structuur voor tabel `parcelsales`
 -- 
 
-CREATE TABLE IF NOT EXISTS `parcelsales` (
+CREATE TABLE `parcelsales` (
   `regionUUID` varchar(255) NOT NULL,
   `parcelname` varchar(255) NOT NULL,
   `parcelUUID` varchar(255) NOT NULL,
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `parcelsales` (
 -- Tabel structuur voor tabel `popularplaces`
 -- 
 
-CREATE TABLE IF NOT EXISTS `popularplaces` (
+CREATE TABLE `popularplaces` (
   `parcelUUID` char(36) NOT NULL,
   `name` varchar(255) NOT NULL,
   `dwell` float NOT NULL,
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `popularplaces` (
 -- Tabel structuur voor tabel `regions`
 -- 
 
-CREATE TABLE IF NOT EXISTS `regionsX` (
+CREATE TABLE `regionsX` (
   `uuid` varchar(36) NOT NULL,
   `regionHandle` bigint(20) unsigned NOT NULL,
   `regionName` varchar(128) NOT NULL,
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `regionsX` (
 ) ENGINE=MyISAM; 
 
 
--- CREATE TABLE IF NOT EXISTS `regions` (
+-- CREATE TABLE `regions` (
 --   `regionname` varchar(255) NOT NULL,
 --   `regionuuid` varchar(255) NOT NULL,
 --   `regionhandle` varchar(255) NOT NULL,
