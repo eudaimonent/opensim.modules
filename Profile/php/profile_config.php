@@ -28,7 +28,7 @@ else
 
 
 
-if (defined('PROFILE_CLASSIFIEDS_TBL'))
+if (!defined('PROFILE_CLASSIFIEDS_TBL'))
 {
 	$GLOBALS['xmlrpc_internalencoding'] = 'UTF-8';
 

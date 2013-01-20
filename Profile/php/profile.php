@@ -1,5 +1,4 @@
 <?php
-
 //
 // Modified by Fumi.Iseki for XoopenSim/Modlos
 //
@@ -8,8 +7,8 @@ require_once('./profile_config.php');
 
 
 // for Debug
-//$request_xml = $HTTP_RAW_POST_DATA;
-//error_log('profile.php: '.$request_xml);
+$request_xml = $HTTP_RAW_POST_DATA;
+error_log('profile.php: '.$request_xml);
 
 
 //
@@ -50,6 +49,7 @@ $xmlrpc_server = xmlrpc_server_create();
 
 
 
+error_log('profile.php: 2');
 #
 # Classifieds
 #
@@ -636,6 +636,7 @@ function avatar_properties_request($method_name, $params, $app_data)
 	global $utf8_encoding;
 	global $DbLink;
 
+error_log('profile.php: 3');
 	$req 	= $params[0];
 	$uuid 	= $req['avatar_id'];
 
@@ -644,15 +645,17 @@ function avatar_properties_request($method_name, $params, $app_data)
 			 'profileLanguagesText,profileFirstImage,profileFirstText';
 	$query_str = 'SELECT '.$items.' FROM '.PROFILE_USERPROFILE_TBL." WHERE useruuid='".$DbLink->escape($uuid)."'";
 																//	" AND profileAllowPublish='1'";
-	//error_log("profile.php: ".$query_str);
+	error_log("profile.php: ".$query_str);
 	$DbLink->query($query_str);
 
 	if ($DbLink->Errno==0)
 	{
+error_log('profile.php: 4');
 		$data = array();
 		while ($row = $DbLink->next_record()) 
 		{
 			$webURL	   = $row['profileURL'];
+error_log('profile.php: 5 '.$webURL);
 			$aboutText = $row['profileAboutText'];
 			$firstText = $row['profileFirstText'];
 			$wantoText = $row['profileWantToText'];
