@@ -27,7 +27,7 @@ using OpenSim.Services.Interfaces;
 
 namespace OpenSim.Modules.OpenProfile
 {
-	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "OpenProfile")]
+	[Extension(Path = "/OpenSim/RegionModules", NodeName = "RegionModule", Id = "OpenProfileModule")]
     public class OpenProfileModule : IProfileModule, ISharedRegionModule
 	{
 		private string encode = "UTF-8";
@@ -64,19 +64,21 @@ namespace OpenSim.Modules.OpenProfile
 
         public Type ReplaceableInterface
 		{
-			get { return null; }
+			//get { return typeof(IProfileModule); }
+			get { return null; }		// The highest priority 
 		}
 
 
 		public void Initialise(IConfigSource config)
 		{
+			//m_log.Info("[PROFILE] Initialise");
 			if (!m_Enabled) return;
 
 			IConfig profileConfig = config.Configs["Profile"];
 
-			if (m_Scenes.Count == 0) // First time
+			if (m_Scenes.Count==0) // First time
 			{
-				if (profileConfig == null)
+				if (profileConfig==null)
 				{
 					m_Enabled = false;
 					return;
@@ -89,7 +91,7 @@ namespace OpenSim.Modules.OpenProfile
                 }
 				//
 				m_ProfileServer = profileConfig.GetString("ProfileURL", "");
-				if (m_ProfileServer == "")
+				if (m_ProfileServer=="")
 				{
 					m_Enabled = false;
 					return;
@@ -113,12 +115,16 @@ namespace OpenSim.Modules.OpenProfile
 
 		public void AddRegion(Scene scene)
 		{
+			//m_log.Info("[PROFILE] AddRegion");
 			if (!m_Enabled) return;
 
-			if (!m_Scenes.Contains(scene)) m_Scenes.Add(scene);
 
-			// Hook up events
-			scene.EventManager.OnNewClient += OnNewClient;
+			if (!m_Scenes.Contains(scene)) 
+			{
+				m_Scenes.Add(scene);
+				scene.EventManager.OnNewClient += OnNewClient;
+				scene.RegisterModuleInterface<IProfileModule>(this);
+			}
 		}
 
        
