@@ -15,8 +15,7 @@ echo "=========================="
 
 cd MuteList$VER
 ./runprebuild.sh
-nant clean
-nant
+xbuild
 
 cp -f ../bin/$DLL ../../bin || exit 1
 
