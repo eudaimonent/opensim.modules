@@ -2,6 +2,10 @@
 
 find . -name "*~"|xargs rm -f 
 
+rm -rf bin
+rm -f  MuteList*/OpenSim.sln
 rm -f  MuteList*/*.build
 rm -f  MuteList*/Modules/*.build
+rm -f  MuteList*/Modules/Messaging.NSLMuteList.csproj*
 rm -rf MuteList*/Modules/bin
+rm -rf MuteList*/Modules/obj
