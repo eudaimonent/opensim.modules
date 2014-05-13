@@ -26,7 +26,7 @@ if (!opensim_is_access_from_region_server()) {
 
 
 // MySQL DataBase
-$DbLink = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD);
+$DbLink = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD, $DB_MYSQLI);
 
 
 

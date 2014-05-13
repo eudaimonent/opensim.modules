@@ -9,6 +9,7 @@ if (defined('CMS_DB_HOST'))
 	$DB_NAME = 	   CMS_DB_NAME;
 	$DB_USER = 	   CMS_DB_USER;
 	$DB_PASSWORD = CMS_DB_PASS;
+	$DB_MYSQLI =   CMS_DB_MYSQLI;
 }
 else if (defined('OPENSIM_DB_HOST'))
 {
@@ -16,6 +17,7 @@ else if (defined('OPENSIM_DB_HOST'))
 	$DB_NAME = 	   OPENSIM_DB_NAME;
 	$DB_USER = 	   OPENSIM_DB_USER;
 	$DB_PASSWORD = OPENSIM_DB_PASS;
+	$DB_MYSQLI =   OPENSIM_DB_MYSQLI;
 } 
 else
 {
@@ -24,6 +26,7 @@ else
 	$DB_NAME = 	   '';
 	$DB_USER = 	   '';
 	$DB_PASSWORD = '';
+	$DB_MYSQLI =   false;
 }
 
 

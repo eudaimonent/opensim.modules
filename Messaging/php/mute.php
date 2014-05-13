@@ -21,7 +21,7 @@ if (!opensim_is_access_from_region_server()) {
 
 
 
-$DbLink = new DB(MUTE_DB_HOST, MUTE_DB_NAME, MUTE_DB_USER, MUTE_DB_PASS);
+$DbLink = new DB(MUTE_DB_HOST, MUTE_DB_NAME, MUTE_DB_USER, MUTE_DB_PASS, MUTE_DB_MYSQLI);
 
 
 $method = $_SERVER["PATH_INFO"];

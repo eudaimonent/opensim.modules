@@ -28,7 +28,7 @@ global $DbLink;
 $now = time();
 
 // MySQL DataBase
-$DbLink = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD);
+$DbLink = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD, $DB_MYSQLI);
 
 
 
@@ -324,7 +324,7 @@ function delete_old_events($hour=24)
 // query to select the next set of hosts to be checked.
 //
 
-$DbLink2 = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD);
+$DbLink2 = new DB($DB_HOST, $DB_NAME, $DB_USER, $DB_PASSWORD, $DB_MYSQLI);
 
 $sql = "SELECT host,port FROM ".SEARCH_HOSTSREGISTER_TBL." WHERE nextcheck<$now AND checked=0 LIMIT 0,50";
 //error_log("parser.php: ".$sql);
