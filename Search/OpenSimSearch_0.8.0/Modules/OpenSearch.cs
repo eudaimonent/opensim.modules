@@ -19,6 +19,8 @@ using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
+using DirFindFlags = OpenMetaverse.DirectoryManager.DirFindFlags;
+
 
 [assembly: Addin("OpenSearchModule", "0.1")]
 [assembly: AddinDependency("OpenSim", "0.5")]
@@ -255,8 +257,7 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		protected void DirPlacesQuery(IClientAPI remoteClient, UUID queryID,
-										string queryText, int queryFlags, int category, string simName, int queryStart)
+		protected void DirPlacesQuery(IClientAPI remoteClient, UUID queryID, string queryText, int queryFlags, int category, string simName, int queryStart)
 		{
 			Hashtable ReqHash 		= new Hashtable();
 			ReqHash["text"] 		= queryText;
@@ -342,8 +343,7 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		public void DirLandQuery(IClientAPI remoteClient, UUID queryID,
-									uint queryFlags, uint searchType, int price, int area, int queryStart)
+		public void DirLandQuery(IClientAPI remoteClient, UUID queryID, uint queryFlags, uint searchType, int price, int area, int queryStart)
 		{
 			Hashtable ReqHash 		= new Hashtable();
 			ReqHash["flags"] 		= queryFlags.ToString();
@@ -390,15 +390,17 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		public void DirFindQuery(IClientAPI remoteClient, UUID queryID,
-									string queryText, uint queryFlags, int queryStart)
+		public void DirFindQuery(IClientAPI remoteClient, UUID queryID, string queryText, uint queryFlags, int queryStart)
 		{
-			if ((queryFlags & 1) != 0)
+			//m_log.ErrorFormat("[SEARCH]: DirFindQuery {0}", queryFlags);
+			//if ((queryFlags & 1) != 0)
+			if (((DirFindFlags)queryFlags & DirFindFlags.People) == DirFindFlags.People)
 			{
 				DirPeopleQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
 				return;
 			}
-			else if ((queryFlags & 32) != 0)
+			//else if ((queryFlags & 32) != 0)
+			if (((DirFindFlags)queryFlags & DirFindFlags.DateEvents) == DirFindFlags.DateEvents)
 			{
 				DirEventsQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
 				return;
@@ -407,26 +409,24 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		public void DirPeopleQuery(IClientAPI remoteClient, UUID queryID,
-									string queryText, uint queryFlags, int queryStart)
+		public void DirPeopleQuery(IClientAPI remoteClient, UUID queryID, string queryText, uint queryFlags, int queryStart)
 		{
 			List<UserAccount> accounts = m_Scenes[0].UserAccountService.GetUserAccounts(m_Scenes[0].RegionInfo.ScopeID, queryText);
-
 			DirPeopleReplyData[] data = new DirPeopleReplyData[accounts.Count];
 
 			int i = 0;
 			foreach (UserAccount item in accounts)
 			{
-				if ((item.UserFlags&0x01)==1) {
-					data[i] 			= new DirPeopleReplyData();
-					data[i].agentID 	= item.PrincipalID;
-					data[i].firstName 	= item.FirstName;
-					data[i].lastName  	= item.LastName;
-					data[i].group 	 	= "";
-					data[i].online 		= false;
-					data[i].reputation 	= 0;
-					i++;
-				}
+				//if ((item.UserFlags&0x01)==1) {
+				data[i] 			= new DirPeopleReplyData();
+				data[i].agentID 	= item.PrincipalID;
+				data[i].firstName 	= item.FirstName;
+				data[i].lastName  	= item.LastName;
+				data[i].group 	 	= "";
+				data[i].online 		= false;
+				data[i].reputation 	= 0;
+				i++;
+				//}
 			}
 
 			remoteClient.SendDirPeopleReply(queryID, data);
@@ -481,8 +481,7 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		public void DirClassifiedQuery(IClientAPI remoteClient, UUID queryID, 
-										string queryText, uint queryFlags, uint category, int queryStart)
+		public void DirClassifiedQuery(IClientAPI remoteClient, UUID queryID, string queryText, uint queryFlags, uint category, int queryStart)
 		{
 			Hashtable ReqHash 		= new Hashtable();
 			ReqHash["text"] 		= queryText;
@@ -649,8 +648,7 @@ namespace OpenSim.Modules.OpenSearch
 
 
 
-		public void HandleMapItemRequest(IClientAPI remoteClient, uint flags,
-										  uint EstateID, bool godlike, uint itemtype, ulong regionhandle)
+		public void HandleMapItemRequest(IClientAPI remoteClient, uint flags, uint EstateID, bool godlike, uint itemtype, ulong regionhandle)
 		{
 			//The following constant appears to be from GridLayerType enum
 			//defined in OpenMetaverse/GridManager.cs of libopenmetaverse.
