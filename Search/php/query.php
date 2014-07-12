@@ -103,6 +103,7 @@ function dir_places_query($method_name, $params, $app_data)
 	global $DbLink;
 
 	$req		 = $params[0];
+	$flags       = $req['flags'];
 	$text		 = $req['text'];
 	$category	 = $req['category'];
 	$query_start = $req['query_start'];
