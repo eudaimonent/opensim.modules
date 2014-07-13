@@ -392,17 +392,53 @@ namespace OpenSim.Modules.OpenSearch
 
 		public void DirFindQuery(IClientAPI remoteClient, UUID queryID, string queryText, uint queryFlags, int queryStart)
 		{
-			//m_log.ErrorFormat("[SEARCH]: DirFindQuery {0}", queryFlags);
-			//if ((queryFlags & 1) != 0)
+			m_log.InfoFormat("[SEARCH]:  OpenSeachModule: DirFindQuery Flags = {0}", queryFlags);
+			/*
+			DirFindFlags
+				People = 1,
+				Online = 2,
+				Events = 8,
+				Groups = 16,
+				DateEvents = 32,
+				AgentOwned = 64,
+				ForSale = 128,
+				GroupOwned = 256,
+				DwellSort = 1024,
+				PgSimsOnly = 2048,
+				PicturesOnly = 4096,
+				PgEventsOnly = 8192,
+				MatureSimsOnly = 16384,
+				SortAsc = 32768,
+				PricesSort = 65536,
+				PerMeterSort = 131072,
+				AreaSort = 262144,
+				NameSort = 524288,
+				LimitByPrice = 1048576,
+				LimitByArea = 2097152,
+				FilterMature = 4194304,
+				PGOnly = 8388608,
+				IncludePG = 16777216,
+				IncludeMature = 33554432,
+				IncludeAdult = 67108864,
+				AdultOnly = 134217728,
+			*/
+
+			//
 			if (((DirFindFlags)queryFlags & DirFindFlags.People) == DirFindFlags.People)
 			{
+				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.People");
 				DirPeopleQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
 				return;
 			}
-			//else if ((queryFlags & 32) != 0)
-			if (((DirFindFlags)queryFlags & DirFindFlags.DateEvents) == DirFindFlags.DateEvents)
+			else if (((DirFindFlags)queryFlags & DirFindFlags.DateEvents) == DirFindFlags.DateEvents)
 			{
+				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.DateEvents");
 				DirEventsQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
+				return;
+			}
+			else if (((DirFindFlags)queryFlags & DirFindFlags.Groups) == DirFindFlags.Groups)
+			{
+				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.Groups. Not be Implemented, yet");
 				return;
 			}
 		}
