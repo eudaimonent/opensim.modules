@@ -11,8 +11,8 @@ require_once('./search_config.php');
 
 
 // for Debug
-//$request_xml = $HTTP_RAW_POST_DATA;
-//error_log("query.php: ".$request_xml);
+$request_xml = $HTTP_RAW_POST_DATA;
+error_log("query.php: ".$request_xml);
 
 
 //
