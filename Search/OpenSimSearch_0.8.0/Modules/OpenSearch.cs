@@ -46,7 +46,8 @@ namespace OpenSim.Modules.OpenSearch
 		private List<Scene> m_Scenes = new List<Scene>();
 		private string m_SearchServer = "";
 		private bool m_Enabled = true;
- 
+
+		private IGroupsModule m_GroupsService = null;
 
 
 		#region ISharedRegionModule Members
@@ -63,10 +64,10 @@ namespace OpenSim.Modules.OpenSearch
 		}
 
 
-        public Type ReplaceableInterface
-        {
-            get { return null; }
-        }
+		public Type ReplaceableInterface
+		{
+			get { return null; }
+		}
 
 
 		public void Initialise(IConfigSource config)
@@ -79,20 +80,20 @@ namespace OpenSim.Modules.OpenSearch
 			{
 				if (searchConfig == null)
 				{
-					m_log.Info("[SEARCH] Not configured, disabling");
+					m_log.Info("[OPEN SEARCH MODULE] Not configured, disabling");
 					m_Enabled = false;
 					return;
 				}
 				m_SearchServer = searchConfig.GetString("SearchURL", "");
 				if (m_SearchServer == "")
 				{
-					m_log.Error("[SEARCH] No search server, disabling search");
+					m_log.Error("[OPEN SEARCH MODULE] No search server, disabling search");
 					m_Enabled = false;
 					return;
 				}
 				else
 				{
-					m_log.Info("[SEARCH] Search module is activated");
+					m_log.Info("[OPEN SEARCH MODULE] Search module is activated");
 					m_Enabled = true;
 				}
 			}
@@ -118,14 +119,22 @@ namespace OpenSim.Modules.OpenSearch
 		}
 
 
-        public void RemoveRegion(Scene scene)
-        {
-        }
+		public void RemoveRegion(Scene scene)
+		{
+		}
 
 
-        public void RegionLoaded(Scene scene)
-        {
-        }
+		public void RegionLoaded(Scene scene)
+		{
+			if (!m_Enabled) return;
+
+			if (m_GroupsService==null)
+			{
+				m_GroupsService = scene.RequestModuleInterface<IGroupsModule>();
+				if (m_GroupsService==null) m_log.Warn("[OPEN SEARCH MODULE]: Could not get IGroupsModule");
+			}
+   
+		}
 
 
 		/*
@@ -139,20 +148,20 @@ namespace OpenSim.Modules.OpenSearch
 			{
 				if (searchConfig == null)
 				{
-					m_log.Info("[SEARCH] Not configured, disabling");
+					m_log.Info("[OPEN SEARCH MODULE] Not configured, disabling");
 					m_Enabled = false;
 					return;
 				}
 				m_SearchServer = searchConfig.GetString("SearchURL", "");
 				if (m_SearchServer == "")
 				{
-					m_log.Error("[SEARCH] No search server, disabling search");
+					m_log.Error("[OPEN SEARCH MODULE] No search server, disabling search");
 					m_Enabled = false;
 					return;
 				}
 				else
 				{
-					m_log.Info("[SEARCH] Search module is activated");
+					m_log.Info("[OPEN SEARCH MODULE] Search module is activated");
 					m_Enabled = true;
 				}
 			}
@@ -213,7 +222,7 @@ namespace OpenSim.Modules.OpenSearch
 			}
 			catch (WebException ex)
 			{
-				m_log.ErrorFormat("[SEARCH]: Unable to connect to Search Server {0}.  Exception {1}", m_SearchServer, ex);
+				m_log.ErrorFormat("[OPEN SEARCH MODULE]: Unable to connect to Search Server {0}.  Exception {1}", m_SearchServer, ex);
 				Hashtable ErrorHash = new Hashtable();
 				ErrorHash["success"] = false;
 				ErrorHash["errorMessage"] = "WEB Connection Error.";
@@ -223,7 +232,7 @@ namespace OpenSim.Modules.OpenSearch
 			}
 			catch (SocketException ex)
 			{
-				m_log.ErrorFormat("[SEARCH]: Unable to connect to Search Server {0}. Exception {1}", m_SearchServer, ex);
+				m_log.ErrorFormat("[OPEN SEARCH MODULE]: Unable to connect to Search Server {0}. Exception {1}", m_SearchServer, ex);
 				Hashtable ErrorHash = new Hashtable();
 				ErrorHash["success"] = false;
 				ErrorHash["errorMessage"] = "Network Socket Error.";
@@ -233,7 +242,7 @@ namespace OpenSim.Modules.OpenSearch
 			}
 			catch (XmlException ex)
 			{
-				m_log.ErrorFormat("[SEARCH]: Unable to connect to Search Server {0}. Exception {1}", m_SearchServer, ex);
+				m_log.ErrorFormat("[OPEN SEARCH MODULE]: Unable to connect to Search Server {0}. Exception {1}", m_SearchServer, ex);
 				Hashtable ErrorHash = new Hashtable();
 				ErrorHash["success"] = false;
 				ErrorHash["errorMessage"] = "XML Parse Error.";
@@ -377,8 +386,8 @@ namespace OpenSim.Modules.OpenSearch
 				data[i] 		   = new DirLandReplyData();
 				data[i].parcelID   = new UUID(d["parcel_id"].ToString());
 				data[i].name 	   = d["name"].ToString();
-				data[i].auction    = Convert.ToBoolean(d["auction"]);
-				data[i].forSale    = Convert.ToBoolean(d["for_sale"]);
+				data[i].auction	= Convert.ToBoolean(d["auction"]);
+				data[i].forSale	= Convert.ToBoolean(d["for_sale"]);
 				data[i].salePrice  = Convert.ToInt32(d["sale_price"]);
 				data[i].actualArea = Convert.ToInt32(d["area"]);
 				i++;
@@ -392,7 +401,7 @@ namespace OpenSim.Modules.OpenSearch
 
 		public void DirFindQuery(IClientAPI remoteClient, UUID queryID, string queryText, uint queryFlags, int queryStart)
 		{
-			m_log.InfoFormat("[SEARCH]:  OpenSeachModule: DirFindQuery Flags = {0}", queryFlags);
+			m_log.InfoFormat("[OPEN SEARCH MODULE]: DirFindQuery Flags = {0}", queryFlags);
 			/*
 			DirFindFlags
 				People = 1,
@@ -426,19 +435,28 @@ namespace OpenSim.Modules.OpenSearch
 			//
 			if (((DirFindFlags)queryFlags & DirFindFlags.People) == DirFindFlags.People)
 			{
-				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.People");
+				m_log.InfoFormat("[OPEN SEARCH MODULE]: DirFindQuery.People");
 				DirPeopleQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
-				return;
-			}
-			else if (((DirFindFlags)queryFlags & DirFindFlags.DateEvents) == DirFindFlags.DateEvents)
-			{
-				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.DateEvents");
-				DirEventsQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
 				return;
 			}
 			else if (((DirFindFlags)queryFlags & DirFindFlags.Groups) == DirFindFlags.Groups)
 			{
-				m_log.InfoFormat("[SEARCH]: OpenSeachModule: DirFindQuery.Groups. Not be Implemented, yet");
+				m_log.InfoFormat("[OPEN SEARCH MODULE]: DirFindQuery.Groups");
+				if (m_GroupsService == null)
+				{
+					m_log.Warn("[OPEN SEARCH MODULE]: Groups service is not available. Unable to search groups.");
+					remoteClient.SendAlertMessage("Groups search is not enabled");
+					return;
+				}
+
+				if (string.IsNullOrEmpty(queryText)) remoteClient.SendDirGroupsReply(queryID, new DirGroupsReplyData[0]);
+				remoteClient.SendDirGroupsReply(queryID, m_GroupsService.FindGroups(remoteClient, queryText).ToArray());
+				return;
+			}
+			else if (((DirFindFlags)queryFlags & DirFindFlags.DateEvents) == DirFindFlags.DateEvents)
+			{
+				m_log.InfoFormat("[OPEN SEARCH MODULE]: DirFindQuery.DateEvents");
+				DirEventsQuery(remoteClient, queryID, queryText, queryFlags, queryStart);
 				return;
 			}
 		}
@@ -693,7 +711,7 @@ namespace OpenSim.Modules.OpenSearch
 				int tc = Environment.TickCount;
 				Hashtable ReqHash = new Hashtable();
 
-				//m_log.Info("[SEARCH] HandleMapItemRequest Start");
+				//m_log.Info("[OPEN SEARCH MODULE] HandleMapItemRequest Start");
 
 				//The flags are: SortAsc (1 << 15), PerMeterSort (1 << 17)
 				ReqHash["flags"] 		= "163840";
