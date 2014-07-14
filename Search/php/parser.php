@@ -164,8 +164,10 @@ function parse($hostname, $port, $xml)
 		$data 	  = $region->getElementsByTagName("data")->item(0);
 		$estate   = $data->getElementsByTagName("estate")->item(0);
 		$username = $estate->getElementsByTagName("name")->item(0)->nodeValue;
-		$useruuid = $estate->getElementsByTagName("uuid")->item(0)->nodeValue;
 		$estateid = $estate->getElementsByTagName("id")->item(0)->nodeValue;
+		$useruuid = $estate->getElementsByTagName("uuid")->item(0)->nodeValue;
+
+		if (empty($useruuid)) continue;
 
 		//
 		// Second, add the new info to the database
@@ -178,8 +180,8 @@ function parse($hostname, $port, $xml)
 								$DbLink->escape($url)."','".
 								$DbLink->escape($username)."','".
 								$DbLink->escape($useruuid)."')";
-
 		$DbLink->query($sql);
+
 
 		//
 		// Start reading the parcel info
