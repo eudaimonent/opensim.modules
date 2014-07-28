@@ -17,17 +17,19 @@ define('OPENSIM_DB_HOST', 'localhost');
 define('OPENSIM_DB_NAME', 'opensim');
 define('OPENSIM_DB_USER', 'opensim_user');
 define('OPENSIM_DB_PASS', 'opensim_pass');
+//
+define('OPENSIM_DB_MYSQLI', false);		// if you use MySQLi interface, please set true
 
 
 // Money Server Access Key
 // Please set same key with MoneyScriptAccessKey in MoneyServer.ini
 define('CURRENCY_SCRIPT_KEY', '123456789');
 
+
 // Group Module Access Keys
 // Please set same keys with at [Groups] section in OpenSim.ini (case of Aurora-Sim, it is Groups.ini)
 define('XMLGROUP_RKEY', '1234');	// Read Key
 define('XMLGROUP_WKEY', '1234');	// Write key
-
 
 
 
@@ -49,6 +51,7 @@ define('CURRENCY_DB_HOST',          OPENSIM_DB_HOST);
 define('CURRENCY_DB_NAME',          OPENSIM_DB_NAME);
 define('CURRENCY_DB_USER',          OPENSIM_DB_USER);
 define('CURRENCY_DB_PASS',          OPENSIM_DB_PASS);
+define('CURRENCY_DB_MYSQLI',        OPENSIM_DB_MYSQLI);
 define('CURRENCY_MONEY_TBL',        'balances');
 define('CURRENCY_TRANSACTION_TBL',  'transactions');
 
@@ -58,6 +61,7 @@ define('OFFLINE_DB_HOST',     		OPENSIM_DB_HOST);
 define('OFFLINE_DB_NAME',     		OPENSIM_DB_NAME);
 define('OFFLINE_DB_USER',     		OPENSIM_DB_USER);
 define('OFFLINE_DB_PASS',     		OPENSIM_DB_PASS);
+define('OFFLINE_DB_MYSQLI',    		OPENSIM_DB_MYSQLI);
 define('OFFLINE_MESSAGE_TBL', 		'offline_message');
 
 
@@ -66,6 +70,7 @@ define('MUTE_DB_HOST',              OPENSIM_DB_HOST);
 define('MUTE_DB_NAME',              OPENSIM_DB_NAME);
 define('MUTE_DB_USER',              OPENSIM_DB_USER);
 define('MUTE_DB_PASS',              OPENSIM_DB_PASS);
+define('MUTE_DB_MYSQLI',            OPENSIM_DB_MYSQLI);
 define('MUTE_LIST_TBL',             'mute_list');
 
 
