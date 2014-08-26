@@ -12,6 +12,7 @@ require_once('./profile_config.php');
 
 
 //
+error_log("xxxxxxxxxxx ");
 if (!opensim_is_access_from_region_server()) {
 	$remote_addr = $_SERVER["REMOTE_ADDR"];
 	error_log("profile.php: Illegal access from ".$remote_addr);
