@@ -44,7 +44,8 @@ if ($method == "/UpdateList/") {
 
 		if (isGUID($agent_id) and isGUID($mute_id) and isNumeric($mute_type) and isNumeric($mute_flags) and isNumeric($timestamp)) {
 
-            if (MUTE_DB_MYSQLI) $esc_name = mysqli_real_escape_string($mute_name);
+			$DbLink->connect();
+            if (MUTE_DB_MYSQLI) $esc_name = mysqli_real_escape_string($DbLink->Link_ID, $mute_name);
             else                $esc_name = mysql_escape_string($mute_name);
 
 			$query_str = "INSERT INTO ".MUTE_LIST_TBL." (agentID,muteID,muteName,muteType,muteFlags,timestamp) ".
@@ -76,7 +77,8 @@ if ($method == "/DeleteList/") {
 		$mute_name  = $parts[12];
 
 		if (isGUID($agent_id) and isGUID($mute_id)) {
-            if (MUTE_DB_MYSQLI) $esc_name = mysqli_real_escape_string($mute_name);
+			$DbLink->connect();
+            if (MUTE_DB_MYSQLI) $esc_name = mysqli_real_escape_string($DbLink->Link_ID, $mute_name);
             else                $esc_name = mysql_escape_string($mute_name);
 
 			$query_str = "DELETE FROM ".MUTE_LIST_TBL." WHERE agentID='".$agent_id."' and muteID='".$mute_id."' and muteName='".$esc_name."'";
