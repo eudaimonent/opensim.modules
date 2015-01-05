@@ -15,8 +15,8 @@ if (!defined('ENV_HELPER_PATH')) define('ENV_HELPER_PATH', '/home/apache/htdocs/
 // Please set MySQL DB access information
 define('OPENSIM_DB_HOST', 'localhost');
 define('OPENSIM_DB_NAME', 'opensim');
-define('OPENSIM_DB_USER', 'opensim_user');
-define('OPENSIM_DB_PASS', 'opensim_pass');
+define('OPENSIM_DB_USER', 'OpensimUser');
+define('OPENSIM_DB_PASS', 'OpensimPass');
 //
 define('OPENSIM_DB_MYSQLI', false);		// if you use MySQLi interface, please set true
 
