@@ -12,8 +12,8 @@ using OpenSim.Region.CoreModules.World.Wind;
 
 namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 {
-    [Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidWind")]
-    class SimpleFluidWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
+    [Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidSolverWind")]
+    class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -38,7 +38,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
         public string Name
         {
-            get { return "SimpleFluidWind"; }
+            get { return "SimpleFluidSolverWind"; }
         }
 
         public void Initialise()
