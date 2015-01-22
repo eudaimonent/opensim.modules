@@ -22,8 +22,8 @@ using OpenSim.Services.Interfaces;
 using DirFindFlags = OpenMetaverse.DirectoryManager.DirFindFlags;
 
 
-[assembly: Addin("OpenSearchModule", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
+[assembly: Addin("OpenSearchModule", "1.0")]
+[assembly: AddinDependency("OpenSim", "0.8.1")]
 
 
 namespace OpenSim.Modules.OpenSearch

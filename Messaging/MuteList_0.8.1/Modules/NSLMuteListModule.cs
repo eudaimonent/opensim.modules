@@ -48,8 +48,8 @@ using OpenSim.Region.Framework.Scenes;
 
 
 
-[assembly: Addin("MuteListModule", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
+[assembly: Addin("MuteListModule", "1.0")]
+[assembly: AddinDependency("OpenSim", "0.8.1")]
 
 
 

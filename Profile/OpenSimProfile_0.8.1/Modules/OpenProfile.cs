@@ -20,8 +20,8 @@ using OpenSim.Region.Framework.Scenes;
 using OpenSim.Services.Interfaces;
 
 
-[assembly: Addin("OpenProfileModule", "0.1")]
-[assembly: AddinDependency("OpenSim", "0.5")]
+[assembly: Addin("OpenProfileModule", "1.0")]
+[assembly: AddinDependency("OpenSim", "0.8.1")]
 
 
 
