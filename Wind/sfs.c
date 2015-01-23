@@ -1,4 +1,3 @@
-
 /*
  * Use FFTW v2.0
  * http://www.fftw.org
@@ -7,7 +6,6 @@
  * gcc sfs.o -L/usr/local/lib -lrfftw -lfftw -shared -O2 -o sfs.so
  * 
  */
-
 
 #include <math.h>
 #include <rfftw.h>
@@ -46,9 +44,8 @@ void stable_solve(int n, float* u, float* v, float* u0, float* v0, float visc, f
 	 * only add the confinement forces (vort_force_u and 
 	 * vort_force_v) if they are activated by the user
 	 */
-
 	for (i=0; i<n*n; i++) {
-		u [i] += dt*u0[i]; 
+		u [i] += dt*u0[i]; 		// 速度の変化
 		u0[i]  = u[i];
 		v [i] += dt*v0[i];
 		v0[i]  = v[i];
@@ -63,8 +60,8 @@ void stable_solve(int n, float* u, float* v, float* u0, float* v0, float visc, f
 
 			/* discretize to grid and compute interpolation factors s and t */
 			i0 = floor(x); 
-			s  = x - i0;
 			j0 = floor(y);
+			s  = x - i0;		// 小数点以下
 			t  = y - j0;
 
 			/* make sure that advection wraps in u direction */
@@ -78,6 +75,7 @@ void stable_solve(int n, float* u, float* v, float* u0, float* v0, float visc, f
 			/* set new velocity to linear interpolation of previous
 			   particle position using interpolation factors s and t
 	 		   and the four grid positions i0, i1, j0 and j1 */
+			// 線型補間
 			u[i+n*j] = (1-s)*((1-t)*u0[i0+n*j0]+t*u0[i0+n*j1]) + s*((1-t)*u0[i1+n*j0]+t*u0[i1+n*j1]);
 			v[i+n*j] = (1-s)*((1-t)*v0[i0+n*j0]+t*v0[i0+n*j1]) + s*((1-t)*v0[i1+n*j0]+t*v0[i1+n*j1]);
 		}
