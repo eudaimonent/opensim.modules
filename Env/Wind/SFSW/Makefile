@@ -1,12 +1,12 @@
 
 
-all: libsfs.so
+all: libsfsw.so
 
-libsfs.so: sfs.o
-	gcc sfs.o -L/usr/local/lib -lrfftw -lfftw -shared -O2 -o libsfs.so
+libsfsw.so: sfsw.o
+	gcc sfsw.o -L/usr/local/lib -lrfftw -lfftw -shared -O2 -o libsfsw.so
 	
-sfs.o: sfs.c 
-	gcc sfs.c -fPIC -W -Wall -I/usr/local/include -c
+sfsw.o: sfsw.c 
+	gcc sfsw.c -fPIC -W -Wall -I/usr/local/include -c
 
 
 clean:
