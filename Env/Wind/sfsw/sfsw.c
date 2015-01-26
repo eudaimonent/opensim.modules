@@ -2,8 +2,8 @@
  * Use FFTW v2.0
  * http://www.fftw.org
  *
- * gcc sfs.c -fPIC -W -Wall -I/usr/local/include -c
- * gcc sfs.o -L/usr/local/lib -lrfftw -lfftw -shared -O2 -o sfs.so
+ * gcc sfsw.c -fPIC -W -Wall -I/usr/local/include -c
+ * gcc sfsw.o -L/usr/local/lib -lm -lrfftw -lfftw -shared -O2 -o libsfsw.so
  * 
  */
 
@@ -11,27 +11,17 @@
 #include <string.h>
 #include <math.h>
 
-#define FFTW_ENABLE_FLOAT 1
 #include <rfftw.h>
 
 
-//static rfftwnd_plan plan_rc, plan_cr;
+static rfftwnd_plan plan_rc, plan_cr;
 
 static fftw_complex* cmp_u = NULL;
 static fftw_complex* cmp_v = NULL;
 
-static float* u0 = NULL;
-static float* v0 = NULL;
+static fftw_real* u0 = NULL;
+static fftw_real* v0 = NULL;
 
-//static size_t fft_len = 0;
-
-
-
-/*
-#define FFT(s,f,t) \
-	if (s==1) rfftwnd_one_real_to_complex(plan_rc, (fftw_real*)f, (fftw_complex*)t);\
-	else      rfftwnd_one_complex_to_real(plan_cr, (fftw_complex*)f, (fftw_real*)t);
-*/
 
 
 #define floor(x) ((x)>=0.0 ? ((int)(x)) : (-((int)(1-(x)))))
@@ -40,17 +30,14 @@ static float* v0 = NULL;
 
 void init_FFT(int n)
 {
-//	plan_rc = rfftw2d_create_plan(n, n, FFTW_REAL_TO_COMPLEX, FFTW_IN_PLACE);
-//	plan_cr = rfftw2d_create_plan(n, n, FFTW_COMPLEX_TO_REAL, FFTW_IN_PLACE);
-
-	printf("[SimpleFluidSolverWind] Initialising.\n");
-	fflush(stdout);
+	plan_rc = rfftw2d_create_plan(n, n, FFTW_REAL_TO_COMPLEX, FFTW_OUT_OF_PLACE);
+	plan_cr = rfftw2d_create_plan(n, n, FFTW_COMPLEX_TO_REAL, FFTW_OUT_OF_PLACE);
 
 	cmp_u = (fftw_complex*)malloc(sizeof(fftw_complex)*n*(n/2+1));
 	cmp_v = (fftw_complex*)malloc(sizeof(fftw_complex)*n*(n/2+1));
 
-	u0 = (float*)malloc(sizeof(float)*n*n);
-	v0 = (float*)malloc(sizeof(float)*n*n);
+	u0 = (fftw_real*)malloc(sizeof(fftw_real)*n*n);
+	v0 = (fftw_real*)malloc(sizeof(fftw_real)*n*n);
 }
 
 
@@ -58,6 +45,10 @@ void init_FFT(int n)
 
 void close_FFT(void)
 {
+	rfftwnd_destroy_plan(plan_rc);
+	rfftwnd_destroy_plan(plan_cr);
+
+	//
 	if (cmp_u!=NULL) {
 		free(cmp_u);
 		cmp_u = NULL;
@@ -79,22 +70,10 @@ void close_FFT(void)
 
 
 
-
-
-
-
-//rfftwnd_destroy_plan(p);
-
-// n : 16
-// dt: 1.0
-// visc: 0.001 viscosity
 void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, float dt)
 {
-	if (v0==NULL) return;
-
 	fftw_real x, y, x0, y0, f, r, U[2], V[2], s, t;
 	int i, j, i0, j0, i1, j1;
-
 
 	for (i=0; i<n*n; i++) {
 		u[i] += dt*fu[i];
@@ -114,17 +93,15 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		}
 	}
 
+	for (j=0; j<n; j++) {
+		for (i=0; i<n; i++) {
+			u0[i+n*j] = (fftw_real)u[i+n*j];
+			v0[i+n*j] = (fftw_real)v[i+n*j];
+		}
+	}
 
-	//memset(cmp_u, 0, sizeof(fftw_complex)*n*(n/2+1));
-	//memset(cmp_v, 0, sizeof(fftw_complex)*n*(n/2+1));
-
-	rfftwnd_plan plan_rc = rfftw2d_create_plan(n, n, FFTW_REAL_TO_COMPLEX, FFTW_ESTIMATE);
-	rfftwnd_plan plan_cr = rfftw2d_create_plan(n, n, FFTW_COMPLEX_TO_REAL, FFTW_IN_PLACE);
-
-	rfftwnd_one_real_to_complex(plan_rc, (fftw_real*)u, cmp_u);
-	rfftwnd_one_real_to_complex(plan_rc, (fftw_real*)v, cmp_v);
-	//FFT(1, u, cmp_u); 
-	//FFT(1, v, cmp_v);
+	rfftwnd_one_real_to_complex(plan_rc, u0, cmp_u);
+	rfftwnd_one_real_to_complex(plan_rc, v0, cmp_v);
 
     for (i=0; i<n/2+1; i++) {
         x = i;
@@ -146,31 +123,27 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		}
 	}
 
-	rfftwnd_one_complex_to_real(plan_cr, cmp_u, (fftw_real*)u);
-	rfftwnd_one_complex_to_real(plan_cr, cmp_v, (fftw_real*)v);
-	//FFT(-1, cmp_u, u); 
-	//FFT(-1, cmp_v, v);
+	rfftwnd_one_complex_to_real(plan_cr, cmp_u, u0);
+	rfftwnd_one_complex_to_real(plan_cr, cmp_v, v0);
 
 	f = 1.0/(n*n);
-	for (i=0; i<n*n; i++) {
-		u[i] *= f;//(float)(f*u0[i+(n+2)*j]);
-		v[i] *= f;//(float)(f*v0[i+(n+2)*j]);
+	for (j=0; j<n; j++) {
+		for (i=0; i<n; i++) {
+			u[i+n*j] = (float)(f*u0[i+n*j]);
+			v[i+n*j] = (float)(f*v0[i+n*j]);
+		}
 	}
-
-	rfftwnd_destroy_plan(plan_rc);
-	rfftwnd_destroy_plan(plan_cr);
 }
 
 
 
-
 /*
+
 int main()
 {
 	int n = 16;
 
 	init_FFT(n);
-
 	
 	float* u = (float*)malloc(sizeof(float)*n*n);
 	float* v = (float*)malloc(sizeof(float)*n*n);
@@ -198,6 +171,8 @@ int main()
 
 	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
+
+	close_FFT();
 
 	return 0;
 }
