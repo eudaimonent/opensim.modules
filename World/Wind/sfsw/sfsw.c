@@ -73,8 +73,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 	}
 	
 	// advection step (-(u.G).u)
-	for (i=0; i<n; i++) {
-		for (j=0; j<n; j++) {
+	for (j=0; j<n; j++) {
+		for (i=0; i<n; i++) {
 			x = i - dt*u0[i+n*j]*n; 
 			y = j - dt*v0[i+n*j]*n;
 
@@ -95,8 +95,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		}
 	}
 
-	for (i=0; i<n; i++) {
-		for (j=0; j<n; j++) {
+	for (j=0; j<n; j++) {
+		for (i=0; i<n; i++) {
 			u0[i+(n+2)*j] = (fftw_real)u[i+n*j]; 
 			v0[i+(n+2)*j] = (fftw_real)v[i+n*j];
 		}
@@ -105,14 +105,13 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 	FFT(1, u0);
 	FFT(1, v0);
 
-	for (i=0; i<=n; i+=2) {
-		x = 0.5*i;
-		for (j=0; j<n; j++) {
-			y = j<=n/2 ? j : j-n;
-
+	for (j=0; j<n; j++) {
+		y = j<=n/2 ? j : j-n;
+		//
+		for (i=0; i<=n; i+=2) {
+			x = 0.5*i;
 			r_sq = x*x + y*y;
 			if (r_sq==0.0) continue;
-
 			f = exp(-r_sq*dt*visc);
 
 			U[0] = u0[i  +(n+2)*j]; V[0] = v0[i  +(n+2)*j];
@@ -129,8 +128,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 	FFT(-1, v0);
 	
 	f = 1.0/(n*n);
-	for (i=0; i<n; i++) {
-		for (j=0; j<n; j++) {
+	for (j=0; j<n; j++) {
+		for (i=0; i<n; i++) {
 			u[i+n*j] = (float)(f*u0[i+(n+2)*j]); 
 			v[i+n*j] = (float)(f*v0[i+(n+2)*j]); 
 		}
@@ -166,6 +165,7 @@ int main()
 	}
 	memset(u, 0, sizeof(float)*n*n);
 	memset(v, 0, sizeof(float)*n*n);
+
 	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 

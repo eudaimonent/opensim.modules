@@ -82,8 +82,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		v0[i] = (fftw_real)v[i];
 	}
 
-	for (x=0.5/n,i=0; i<n; i++,x+=1.0/n) {
-		for (y=0.5/n,j=0; j<n; j++,y+=1.0/n) {
+	for (y=0.5/n,j=0; j<n; j++,y+=1.0/n) {
+		for (x=0.5/n,i=0; i<n; i++,x+=1.0/n) {
 			x0 = n*(x-dt*u0[i+n*j])-0.5; 
 			y0 = n*(y-dt*v0[i+n*j])-0.5;
 			i0 = floor(x0); s = x0-i0; i0 = (n+(i0%n))%n; i1 = (i0+1)%n;
@@ -93,20 +93,19 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		}
 	}
 
-	for (j=0; j<n; j++) {
-		for (i=0; i<n; i++) {
-			u0[i+n*j] = (fftw_real)u[i+n*j];
-			v0[i+n*j] = (fftw_real)v[i+n*j];
-		}
+	for (i=0; i<n*n; i++) {
+		u0[i] = (fftw_real)u[i];
+		v0[i] = (fftw_real)v[i];
 	}
 
 	rfftwnd_one_real_to_complex(plan_rc, u0, cmp_u);
 	rfftwnd_one_real_to_complex(plan_rc, v0, cmp_v);
 
-    for (i=0; i<n/2+1; i++) {
-        x = i;
-        for (j=0; j<n; j++) {
-            y = j<=n/2 ? j : j-n;
+	for (j=0; j<n; j++) {
+		y = j<=n/2 ? j : j-n;
+		//
+		for (i=0; i<n/2+1; i++) {
+			x = i;
 
 			r = x*x+y*y;
 			if (r==0.0) continue;
@@ -163,6 +162,7 @@ int main()
 	}
 	memset(u, 0, sizeof(float)*n*n);
 	memset(v, 0, sizeof(float)*n*n);
+
 	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 

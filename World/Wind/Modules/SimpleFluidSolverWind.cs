@@ -119,7 +119,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 			
 				stable_solve(16, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 0.001f, 1.0f);
-				m_log.InfoFormat("[SimpleFluidSolverWind] Average Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
+				//m_log.InfoFormat("[SimpleFluidSolverWind] Average Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 
 				for (int i=0; i<16*16; i++)
 				{
