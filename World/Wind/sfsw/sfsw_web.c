@@ -60,7 +60,7 @@ void close_FFT(void)
 }
 
 
-void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, float dt)
+void stable_solve(int n, float* u, float* v, float* fu, float* fv, float dist, float visc, float dt)
 {
 	fftw_real x, y, f, r_sq, U[2], V[2], s, t; 
 	int  i, j, i0, j0, i1, j1;
@@ -75,8 +75,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 	// advection step (-(u.G).u)
 	for (j=0; j<n; j++) {
 		for (i=0; i<n; i++) {
-			x = i - dt*u0[i+n*j]*n; 
-			y = j - dt*v0[i+n*j]*n;
+			x = i - dt*u0[i+n*j]/dist; 
+			y = j - dt*v0[i+n*j]/dist;
 
 			i0 = floor(x); 
 			j0 = floor(y);
@@ -166,13 +166,15 @@ int main()
 	memset(u, 0, sizeof(float)*n*n);
 	memset(v, 0, sizeof(float)*n*n);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	float dist = 256./n;
+
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
 	return 0;

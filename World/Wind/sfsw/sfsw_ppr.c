@@ -70,7 +70,7 @@ void close_FFT(void)
 
 
 
-void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, float dt)
+void stable_solve(int n, float* u, float* v, float* fu, float* fv, float dist, float visc, float dt)
 {
 	fftw_real x, y, x0, y0, f, r, U[2], V[2], s, t;
 	int i, j, i0, j0, i1, j1;
@@ -82,21 +82,26 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 		v0[i] = (fftw_real)v[i];
 	}
 
-	y = 0.5/n;
 	for (j=0; j<n; j++) {
-		x = 0.5/n;
 		for (i=0; i<n; i++) {
-			x0 = n*(x-dt*u0[i+n*j]) - 0.5; 
-			y0 = n*(y-dt*v0[i+n*j]) - 0.5;
-			i0 = floor(x0); s = x0-i0; i0 = (n+(i0%n))%n; i1 = (i0+1)%n;
-			j0 = floor(y0); t = y0-j0; j0 = (n+(j0%n))%n; j1 = (j0+1)%n;
+			x0 = i - dt*u0[i+n*j]/dist; 
+			y0 = j - dt*v0[i+n*j]/dist;
+
+			i0 = floor(x0); 
+			j0 = floor(y0);
+			s  = x0 - i0; 
+			t  = y0 - j0; 
+
+			i0 = (n+(i0%n))%n; 
+			i1 = (i0+1)%n;
+
+			j0 = (n+(j0%n))%n; 
+			j1 = (j0+1)%n;
 			//
 			u[i+n*j] = (float)((1-s)*((1-t)*u0[i0+n*j0]+t*u0[i0+n*j1]) + s*((1-t)*u0[i1+n*j0]+t*u0[i1+n*j1]));
 			v[i+n*j] = (float)((1-s)*((1-t)*v0[i0+n*j0]+t*v0[i0+n*j1]) + s*((1-t)*v0[i1+n*j0]+t*v0[i1+n*j1]));
 			//
-			x += 1.0/n;
 		}
-		y += 1.0/n;
 	}
 
 	for (i=0; i<n*n; i++) {
@@ -121,8 +126,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 			V[0] = cmp_v[i+(n/2+1)*j].re;
 			U[1] = cmp_u[i+(n/2+1)*j].im;
 			V[1] = cmp_v[i+(n/2+1)*j].im;
-			cmp_u[i+(n/2+1)*j].re = f*((1-x*x/r)*U[0] - x*y/r    *V[0]);
-			cmp_u[i+(n/2+1)*j].im = f*((1-x*x/r)*U[1] - x*y/r    *V[1]);
+			cmp_u[i+(n/2+1)*j].re = f*((1-x*x/r)*U[0] - x*y/r	*V[0]);
+			cmp_u[i+(n/2+1)*j].im = f*((1-x*x/r)*U[1] - x*y/r	*V[1]);
 			cmp_v[i+(n/2+1)*j].re = f*(   -y*x/r*U[0] + (1-y*y/r)*V[0]);
 			cmp_v[i+(n/2+1)*j].im = f*(   -y*x/r*U[1] + (1-y*y/r)*V[1]);
 		}
@@ -169,13 +174,15 @@ int main()
 	memset(u, 0, sizeof(float)*n*n);
 	memset(v, 0, sizeof(float)*n*n);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	float dist = 256./n;
+
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
 	close_FFT();

@@ -22,7 +22,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	[Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidSolverWind")]
 	class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
 	{
-		private const int m_mesh = 16;
+		private const int   m_mesh = 16;
+		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
 
 		private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -35,7 +36,10 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		private float[] m_windSpeeds_v = new float[m_mesh*m_mesh];
 		private float[] m_windForces_u = new float[m_mesh*m_mesh];
 		private float[] m_windForces_v = new float[m_mesh*m_mesh];
+		private float[] m_initForces_u = new float[m_mesh*m_mesh];
+		private float[] m_initForces_v = new float[m_mesh*m_mesh];
 
+		//
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
 		private extern static void init_FFT(int n);
 
@@ -44,7 +48,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
 		private static extern void stable_solve(int n, [MarshalAs(UnmanagedType.LPArray)] float[] u,  [MarshalAs(UnmanagedType.LPArray)] float[] v, 
-													   [MarshalAs(UnmanagedType.LPArray)] float[] u0, [MarshalAs(UnmanagedType.LPArray)] float[] v0, float visc, float dt);
+													   [MarshalAs(UnmanagedType.LPArray)] float[] u0, [MarshalAs(UnmanagedType.LPArray)] float[] v0,
+													   float dist, float visc, float dt);
 
 		#region IPlugin Members
 
@@ -67,9 +72,13 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			{
 				m_windSpeeds_u[i] = 0.0f;
 				m_windSpeeds_v[i] = 0.0f;
-				m_windForces_u[i] = 0.0f;
-				m_windForces_v[i] = 0.0f;
+				m_windForces_u[i] = 0.0f; 
+				m_windForces_v[i] = 0.0f; 
+				m_initForces_u[i] = 0.0f; 
+				m_initForces_v[i] = 0.0f; 
 			}
+			//
+			setInitForces(0);
 		}
 
 		#endregion
@@ -85,6 +94,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			m_windSpeeds_v = null;
 			m_windForces_u = null;
 			m_windForces_v = null;
+			m_initForces_u = null;
+			m_initForces_v = null;
 
 			close_FFT();
 		}
@@ -108,25 +119,24 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 		public void WindUpdate(uint frame)
 		{
-			if (m_windSpeeds!=null) {
-				for (int y=0; y<m_mesh; y++)
-				{
-					for (int x=0; x<m_mesh; x++)
-					{
-						m_windForces_u[y*m_mesh + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
-						m_windForces_v[y*m_mesh + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
-						m_windForces_u[y*m_mesh + x] *= m_strength;
-						m_windForces_v[y*m_mesh + x] *= m_strength;
-					}
+			if (m_windSpeeds!=null)
+			{
+				for (int i=0; i<m_mesh*m_mesh; i++) {
+					m_windForces_u[i] = m_initForces_u[i]*m_strength;
+					m_windForces_v[i] = m_initForces_v[i]*m_strength;
 				}
-			
-				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 0.001f, 1.0f);
-				//m_log.InfoFormat("[SimpleFluidSolverWind] Average Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 
+				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_dist, 0.001f, 1.0f);
+				m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
+				m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
+				//
 				for (int i=0; i<m_mesh*m_mesh; i++)
 				{
 					m_windSpeeds[i].X = m_windSpeeds_u[i];
 					m_windSpeeds[i].Y = m_windSpeeds_v[i];
+					//
+					m_initForces_u[i] *= 0.85f;
+					m_initForces_v[i] *= 0.85f;
 				}
 			}
 		}
@@ -203,6 +213,58 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 
 		#endregion
+
+
+
+		private void setInitForces(int no)
+		{
+			int i, j;
+
+			if (no==0)
+			{
+				for (i=0; i<m_mesh*m_mesh; i++) {
+					m_initForces_u[i] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1 
+					m_initForces_v[i] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1 
+				}
+			}
+
+			else if (no==1) 
+			{
+				for (i=0, j=m_mesh-1; i<m_mesh/3; i++, j--) {
+					m_initForces_u[i + j*m_mesh] += 1.0f + ((float)i) * 0.1f;
+					m_initForces_v[i + j*m_mesh] -= 1.0f + ((float)i) * 0.1f;
+				}
+			}
+
+			else if (no==2) 
+			{
+				for (j=m_mesh/10; j<m_mesh-m_mesh/10; j++) {
+					i = m_mesh/10;
+					m_initForces_v[i + j*m_mesh] += 0.1f;
+					i = m_mesh - m_mesh/10;
+					m_initForces_v[i + j*m_mesh] -= 0.1f;
+				}
+	
+				for (i=m_mesh/10; i<m_mesh-m_mesh/10; i++) {
+					j = m_mesh/10;
+					m_initForces_u[i + j*m_mesh] -= 0.1f;
+					j = m_mesh-m_mesh/10;
+					m_initForces_u[i + j*m_mesh] += 0.1f;
+				}
+	
+				float radius = ((float) m_mesh)/4.0f;
+
+				for (float f=0.0f; f<360.0; f+=0.25f) {
+					float angle = f/(2*(float)Math.PI);
+					float x = (float)Math.Sin(angle)*radius;
+					float y = (float)Math.Cos(angle)*radius;
+					//
+					m_initForces_u[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] -= (float)Math.Cos(angle)*0.1f;
+					m_initForces_v[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] += (float)Math.Sin(angle)*0.1f;	  
+				}	
+			}
+		}
+
 
 
 /*
