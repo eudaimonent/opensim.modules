@@ -1,5 +1,8 @@
 //
-// 
+// A Simple Fluid Solver Wind by Jos Stam for OpenSim
+// 		http://www.dgp.utoronto.ca/people/stam/reality/Research/pub.html
+//	
+//  by Fumi.Iseki
 //
 
 using System;
@@ -98,7 +101,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			m_initForces_u = null;
 			m_initForces_v = null;
 
-			close_FFT();
+			//close_FFT();	// マルチリージョンでセグメンテーションフォルト
 		}
 
 		#endregion

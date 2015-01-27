@@ -45,8 +45,8 @@ void init_FFT(int n)
 
 void close_FFT(void)
 {
-//	rfftwnd_destroy_plan(plan_rc);		// OpenSim のマルチリージョンで終了時にエラー
-//	rfftwnd_destroy_plan(plan_cr);
+	rfftwnd_destroy_plan(plan_rc);	// OpenSim のマルチリージョンで終了時にエラー
+	rfftwnd_destroy_plan(plan_cr);
 
 	//
 	if (u0!=NULL) {
