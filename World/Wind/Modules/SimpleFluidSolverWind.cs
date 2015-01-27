@@ -22,19 +22,19 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	[Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidSolverWind")]
 	class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
 	{
-		private const int m_rank = 64;
+		private const int m_mesh = 16;
 
 		private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-		private Vector2[] m_windSpeeds = new Vector2[m_rank*m_rank];
+		private Vector2[] m_windSpeeds = new Vector2[m_mesh*m_mesh];
 
 		private float m_strength = 1.0f;
 		private Random m_rndnums = new Random(Environment.TickCount);
 
-		private float[] m_windSpeeds_u = new float[m_rank*m_rank];
-		private float[] m_windSpeeds_v = new float[m_rank*m_rank];
-		private float[] m_windForces_u = new float[m_rank*m_rank];
-		private float[] m_windForces_v = new float[m_rank*m_rank];
+		private float[] m_windSpeeds_u = new float[m_mesh*m_mesh];
+		private float[] m_windSpeeds_v = new float[m_mesh*m_mesh];
+		private float[] m_windForces_u = new float[m_mesh*m_mesh];
+		private float[] m_windForces_v = new float[m_mesh*m_mesh];
 
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
 		private extern static void init_FFT(int n);
@@ -61,9 +61,9 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 		public void Initialise()
 		{
-			init_FFT(m_rank);
+			init_FFT(m_mesh);
 
-			for (int i=0; i<m_rank*m_rank; i++)
+			for (int i=0; i<m_mesh*m_mesh; i++)
 			{
 				m_windSpeeds_u[i] = 0.0f;
 				m_windSpeeds_v[i] = 0.0f;
@@ -109,21 +109,21 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		public void WindUpdate(uint frame)
 		{
 			if (m_windSpeeds!=null) {
-				for (int y=0; y<m_rank; y++)
+				for (int y=0; y<m_mesh; y++)
 				{
-					for (int x=0; x<m_rank; x++)
+					for (int x=0; x<m_mesh; x++)
 					{
-						m_windForces_u[y*m_rank + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
-						m_windForces_v[y*m_rank + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
-						m_windForces_u[y*m_rank + x] *= m_strength;
-						m_windForces_v[y*m_rank + x] *= m_strength;
+						m_windForces_u[y*m_mesh + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
+						m_windForces_v[y*m_mesh + x] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1
+						m_windForces_u[y*m_mesh + x] *= m_strength;
+						m_windForces_v[y*m_mesh + x] *= m_strength;
 					}
 				}
 			
-				stable_solve(m_rank, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 0.001f, 1.0f);
+				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 0.001f, 1.0f);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] Average Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 
-				for (int i=0; i<m_rank*m_rank; i++)
+				for (int i=0; i<m_mesh*m_mesh; i++)
 				{
 					m_windSpeeds[i].X = m_windSpeeds_u[i];
 					m_windSpeeds[i].Y = m_windSpeeds_v[i];
@@ -136,18 +136,18 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		{
 			Vector3 windVector = new Vector3(0.0f, 0.0f, 0.0f);
 
-			int x = (int)fX/m_rank;
-			int y = (int)fY/m_rank;
+			int x = (int)fX/m_mesh;
+			int y = (int)fY/m_mesh;
 
 			if (x<0) 		x = 0;
-			if (x>m_rank-1) x = m_rank - 1;
+			if (x>m_mesh-1) x = m_mesh - 1;
 			if (y<0) 		y = 0;
-			if (y>m_rank-1) y = m_rank - 1;
+			if (y>m_mesh-1) y = m_mesh - 1;
 
 			if (m_windSpeeds!=null)
 			{
-				windVector.X = m_windSpeeds[y*m_rank + x].X;
-				windVector.Y = m_windSpeeds[y*m_rank + x].Y;
+				windVector.X = m_windSpeeds[y*m_mesh + x].X;
+				windVector.Y = m_windSpeeds[y*m_mesh + x].Y;
 			}
 
 			return windVector;
