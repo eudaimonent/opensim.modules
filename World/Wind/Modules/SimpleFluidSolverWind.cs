@@ -15,6 +15,7 @@ using log4net;
 using OpenMetaverse;
 using Mono.Addins;
 
+using OpenSim.Framework;
 using OpenSim.Region.Framework.Interfaces;
 using OpenSim.Region.CoreModules.World.Wind;
 
@@ -132,6 +133,11 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_region_size = windConfig.GetInt("region", 256);
 				    m_region_size = (((int)Math.Abs(m_region_size)+255)/256)*256;
 					if (m_region_size==0) m_region_size = 256;
+				}
+
+				if (scene!=null)
+				{
+					m_region_size = (int)scene.RegionInfo.RegionSizeX;
 				}
 			}
 		}
