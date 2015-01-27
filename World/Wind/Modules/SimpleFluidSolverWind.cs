@@ -192,7 +192,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			Dictionary<string, string> Params = new Dictionary<string, string>();
 
 			Params.Add("strength", "wind strength");
-			Params.Add("init_force", "initial force");
+			Params.Add("force", "initial force");
 			Params.Add("damping", "damping of force");
 			return Params;
 		}
