@@ -60,7 +60,7 @@ void close_FFT(void)
 }
 
 
-void stable_solve(int n, float* u, float* v, float* fu, float* fv, float dist, float visc, float dt)
+void stable_solve(int n, float* u, float* v, float* fu, float* fv, int rsize, float visc, float dt)
 {
 	fftw_real x, y, f, r_sq, U[2], V[2], s, t; 
 	int  i, j, i0, j0, i1, j1;
@@ -68,15 +68,15 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float dist, f
 	for (i=0; i<n*n; i++) {
 		u [i] += dt*fu[i]; 		// 速度の変化
 		v [i] += dt*fv[i];
-		u0[i]  = (fftw_real)u[i];
-		v0[i]  = (fftw_real)v[i];
+		u0[i]  = (fftw_real)u[i]/rsize;
+		v0[i]  = (fftw_real)v[i]/rsize;
 	}
 	
 	// advection step (-(u.G).u)
 	for (j=0; j<n; j++) {
 		for (i=0; i<n; i++) {
-			x = i - dt*u0[i+n*j]/dist; 
-			y = j - dt*v0[i+n*j]/dist;
+			x = i - dt*u0[i+n*j]*n; 
+			y = j - dt*v0[i+n*j]*n;
 
 			i0 = floor(x); 
 			j0 = floor(y);
@@ -130,8 +130,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float dist, f
 	f = 1.0/(n*n);
 	for (j=0; j<n; j++) {
 		for (i=0; i<n; i++) {
-			u[i+n*j] = (float)(f*u0[i+(n+2)*j]); 
-			v[i+n*j] = (float)(f*v0[i+(n+2)*j]); 
+			u[i+n*j] = (float)(f*u0[i+(n+2)*j])*rsize; 
+			v[i+n*j] = (float)(f*v0[i+(n+2)*j])*rsize; 
 		}
 	}
 }

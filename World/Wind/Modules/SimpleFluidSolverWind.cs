@@ -23,7 +23,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
 	{
 		private const int   m_mesh = 16;
-		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
+//		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
 		private int   m_init_force = 0;
 		private float m_damping_rate = 0.85f;
 
@@ -51,7 +51,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
 		private static extern void stable_solve(int n, [MarshalAs(UnmanagedType.LPArray)] float[] u,  [MarshalAs(UnmanagedType.LPArray)] float[] v, 
 													   [MarshalAs(UnmanagedType.LPArray)] float[] u0, [MarshalAs(UnmanagedType.LPArray)] float[] v0,
-													   float dist, float visc, float dt);
+													   int rsize, float visc, float dt);
 
 		#region IPlugin Members
 
@@ -134,7 +134,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_windForces_v[i] = m_initForces_v[i]*m_strength;
 				}
 
-				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_dist, 0.001f, 1.0f);
+				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 256, 0.001f, 1.0f);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
 				//
