@@ -22,9 +22,9 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	[Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidSolverWind")]
 	class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
 	{
-		private const int   m_mesh = 16;
-//		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
+		private const int  m_mesh = 16;
 		private int   m_init_force = 0;
+		private int   m_region_size = 256;
 		private float m_damping_rate = 0.85f;
 
 		private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -111,15 +111,21 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				{
 					m_strength = windConfig.GetFloat("strength", 1.0f);
 				}
+				if (windConfig.Contains("damping"))
+				{
+					m_damping_rate = windConfig.GetFloat("damping", 0);
+					if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
+				}
 				if (windConfig.Contains("force"))
 				{
 					m_init_force = windConfig.GetInt("force", 0);
 					if (m_init_force<0 || m_init_force>2) m_init_force = 0;
 				}
-				if (windConfig.Contains("damping"))
+				if (windConfig.Contains("region"))
 				{
-					m_damping_rate = windConfig.GetFloat("damping", 0);
-					if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
+					m_region_size = windConfig.GetInt("region", 256);
+				    m_region_size = (((int)Math.Abs(m_region_size)+255)/256)*256;
+					if (m_region_size==0) m_region_size = 256;
 				}
 			}
 		}
@@ -134,7 +140,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_windForces_v[i] = m_initForces_v[i]*m_strength;
 				}
 
-				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, 256, 0.001f, 1.0f);
+				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_region_size, 0.001f, 1.0f);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
 				//
@@ -194,6 +200,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			Params.Add("strength", "wind strength");
 			Params.Add("force", "initial force");
 			Params.Add("damping", "damping of force");
+			Params.Add("region", "size of region");
 			return Params;
 		}
 
@@ -207,6 +214,12 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : strength = {0}", m_strength);
 				  break;
 
+				case "damping":
+				  m_damping_rate = value;
+				  if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : damping = {0}", m_damping_rate);
+				  break;
+
 				case "force":
 				  m_init_force = (int)value;
 				  if (m_init_force<0 || m_init_force>2) m_init_force = 0;
@@ -214,10 +227,10 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				  Initialise();
 				  break;
 
-				case "damping":
-				  m_damping_rate = value;
-				  if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
-				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : damping = {0}", m_damping_rate);
+				case "region":
+				  m_region_size = (((int)Math.Abs(value)+255)/256)*256;
+				  if (m_region_size==0) m_region_size = 256;
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : region = {0}", m_region_size);
 				  break;
 			}
 		}
@@ -230,11 +243,14 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				case "strength":
 				  return m_strength;
 
+				case "damping":
+				  return m_damping_rate;
+
 				case "force":
 				  return (float)m_init_force;
 
-				case "damping":
-				  return m_damping_rate;
+				case "region":
+				  return (float)m_region_size;
 
 				default:
 				  throw new Exception(String.Format("Unknown {0} parameter {1}", this.Name, param));
