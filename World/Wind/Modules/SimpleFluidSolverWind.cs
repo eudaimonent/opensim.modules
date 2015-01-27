@@ -24,6 +24,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	{
 		private const int   m_mesh = 16;
 		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
+		private int   m_init_force = 0;
 
 		private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -72,13 +73,9 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			{
 				m_windSpeeds_u[i] = 0.0f;
 				m_windSpeeds_v[i] = 0.0f;
-				m_windForces_u[i] = 0.0f; 
-				m_windForces_v[i] = 0.0f; 
-				m_initForces_u[i] = 0.0f; 
-				m_initForces_v[i] = 0.0f; 
 			}
 			//
-			setInitForces(0);
+			initForces();
 		}
 
 		#endregion
@@ -112,6 +109,11 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				if (windConfig.Contains("strength"))
 				{
 					m_strength = windConfig.GetFloat("strength", 1.0f);
+				}
+				if (windConfig.Contains("init_force"))
+				{
+					m_init_force = windConfig.GetInt("init_force", 0);
+					if (m_init_force<0 || m_init_force>2) m_init_force = 0;
 				}
 			}
 		}
@@ -184,6 +186,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			Dictionary<string, string> Params = new Dictionary<string, string>();
 
 			Params.Add("strength", "wind strength");
+			Params.Add("init_force", "initial force");
 			return Params;
 		}
 
@@ -194,6 +197,11 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			{
 				case "strength":
 				  m_strength = value;
+				  break;
+
+				case "init_force":
+				  m_init_force = (int)value;
+				  Initialise();
 				  break;
 			}
 		}
@@ -206,6 +214,9 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				case "strength":
 				  return m_strength;
 
+				case "init_force":
+				  return (float)m_init_force;
+
 				default:
 				  throw new Exception(String.Format("Unknown {0} parameter {1}", this.Name, param));
 			}
@@ -215,12 +226,24 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		#endregion
 
 
+		//
+		public void initForces()
+		{
+			for (int i=0; i<m_mesh*m_mesh; i++)
+			{
+				m_initForces_u[i] = 0.0f; 
+				m_initForces_v[i] = 0.0f; 
+			}
+			//
+			setInitForces(m_init_force);
+		}
 
-		private void setInitForces(int no)
+
+		private void setInitForces(int init)
 		{
 			int i, j;
 
-			if (no==0)
+			if (init==0)
 			{
 				for (i=0; i<m_mesh*m_mesh; i++) {
 					m_initForces_u[i] = (float)(m_rndnums.NextDouble()*2d - 1d); // -1 to 1 
@@ -228,7 +251,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 			}
 
-			else if (no==1) 
+			else if (init==1) 
 			{
 				for (i=0, j=m_mesh-1; i<m_mesh/3; i++, j--) {
 					m_initForces_u[i + j*m_mesh] += 1.0f + ((float)i) * 0.1f;
@@ -236,7 +259,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 			}
 
-			else if (no==2) 
+			else if (init==2) 
 			{
 				for (j=m_mesh/10; j<m_mesh-m_mesh/10; j++) {
 					i = m_mesh/10;
