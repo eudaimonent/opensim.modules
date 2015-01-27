@@ -25,6 +25,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		private const int   m_mesh = 16;
 		private const float m_dist = 16.0f;		// 256/m_mesh  グリッド間距離
 		private int   m_init_force = 0;
+		private float m_damping_rate = 0.85f;
 
 		private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -110,10 +111,15 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				{
 					m_strength = windConfig.GetFloat("strength", 1.0f);
 				}
-				if (windConfig.Contains("init_force"))
+				if (windConfig.Contains("force"))
 				{
-					m_init_force = windConfig.GetInt("init_force", 0);
+					m_init_force = windConfig.GetInt("force", 0);
 					if (m_init_force<0 || m_init_force>2) m_init_force = 0;
+				}
+				if (windConfig.Contains("damping"))
+				{
+					m_damping_rate = windConfig.GetFloat("damping", 0);
+					if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
 				}
 			}
 		}
@@ -137,8 +143,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_windSpeeds[i].X = m_windSpeeds_u[i];
 					m_windSpeeds[i].Y = m_windSpeeds_v[i];
 					//
-					m_initForces_u[i] *= 0.85f;
-					m_initForces_v[i] *= 0.85f;
+					m_initForces_u[i] *= m_damping_rate;
+					m_initForces_v[i] *= m_damping_rate;
 				}
 			}
 		}
@@ -187,6 +193,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 			Params.Add("strength", "wind strength");
 			Params.Add("init_force", "initial force");
+			Params.Add("damping", "damping of force");
 			return Params;
 		}
 
@@ -197,11 +204,20 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			{
 				case "strength":
 				  m_strength = value;
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : strength = {0}", m_strength);
 				  break;
 
-				case "init_force":
+				case "force":
 				  m_init_force = (int)value;
+				  if (m_init_force<0 || m_init_force>2) m_init_force = 0;
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : force = {0}", m_init_force);
 				  Initialise();
+				  break;
+
+				case "damping":
+				  m_damping_rate = value;
+				  if (m_damping_rate>1.0f) m_damping_rate = 1.0f;
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : damping = {0}", m_damping_rate);
 				  break;
 			}
 		}
@@ -214,8 +230,11 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				case "strength":
 				  return m_strength;
 
-				case "init_force":
+				case "force":
 				  return (float)m_init_force;
+
+				case "damping":
+				  return m_damping_rate;
 
 				default:
 				  throw new Exception(String.Format("Unknown {0} parameter {1}", this.Name, param));
