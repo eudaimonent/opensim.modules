@@ -1,3 +1,6 @@
+//
+// 
+//
 
 using System;
 using System.Collections.Generic;
@@ -22,8 +25,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 	[Extension(Path = "/OpenSim/WindModule", NodeName = "WindModel", Id = "SimpleFluidSolverWind")]
 	class SimpleFluidSolverWind : Mono.Addins.TypeExtensionNode, IWindModelPlugin
 	{
-		private const int  m_mesh = 16;
-		private int   m_init_force = 0;
+		private const int   m_mesh  = 16;
+		private int   m_init_force  = 0;
 		private int   m_region_size = 256;
 		private float m_damping_rate = 0.85f;
 

@@ -45,8 +45,8 @@ void init_FFT(int n)
 
 void close_FFT(void)
 {
-	rfftwnd_destroy_plan(plan_rc);
-	rfftwnd_destroy_plan(plan_cr);
+//	rfftwnd_destroy_plan(plan_rc);		// OpenSim のマルチリージョンで終了時にエラー
+//	rfftwnd_destroy_plan(plan_cr);
 
 	//
 	if (u0!=NULL) {
@@ -166,15 +166,15 @@ int main()
 	memset(u, 0, sizeof(float)*n*n);
 	memset(v, 0, sizeof(float)*n*n);
 
-	float dist = 256./n;
+	int rsize = 256;
 
-	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, dist, 0.001, 1.0);
+	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
 	return 0;
