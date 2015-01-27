@@ -84,8 +84,8 @@ void stable_solve(int n, float* u, float* v, float* fu, float* fv, float visc, f
 
 	for (y=0.5/n,j=0; j<n; j++,y+=1.0/n) {
 		for (x=0.5/n,i=0; i<n; i++,x+=1.0/n) {
-			x0 = n*(x-dt*u0[i+n*j])-0.5; 
-			y0 = n*(y-dt*v0[i+n*j])-0.5;
+			x0 = n*(x-dt*u0[i+n*j]) - 0.5; 
+			y0 = n*(y-dt*v0[i+n*j]) - 0.5;
 			i0 = floor(x0); s = x0-i0; i0 = (n+(i0%n))%n; i1 = (i0+1)%n;
 			j0 = floor(y0); t = y0-j0; j0 = (n+(j0%n))%n; j1 = (j0+1)%n;
 			u[i+n*j] = (float)((1-s)*((1-t)*u0[i0+n*j0]+t*u0[i0+n*j1])+ s*((1-t)*u0[i1+n*j0]+t*u0[i1+n*j1]));
