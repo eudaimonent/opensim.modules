@@ -127,8 +127,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 
 				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_dist, 0.001f, 1.0f);
-				m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
-				m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
+				//m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
+				//m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
 				//
 				for (int i=0; i<m_mesh*m_mesh; i++)
 				{
