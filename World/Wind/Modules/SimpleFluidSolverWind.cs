@@ -128,13 +128,13 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_init_force = windConfig.GetInt("force", 0);
 					if (m_init_force<0 || m_init_force>2) m_init_force = 0;
 				}
+				//
 				if (windConfig.Contains("region"))
 				{
 					m_region_size = windConfig.GetInt("region", 256);
 				    m_region_size = (((int)Math.Abs(m_region_size)+255)/256)*256;
 					if (m_region_size==0) m_region_size = 256;
 				}
-
 				if (scene!=null)
 				{
 					m_region_size = (int)scene.RegionInfo.RegionSizeX;
