@@ -61,6 +61,7 @@ default
         }
 
         else if (cmd=="reset") {
+            osSetWindParam("SimpleFluidSolverWind", "reset", 0.0);
             init();
         }
 

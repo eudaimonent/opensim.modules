@@ -77,13 +77,9 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		{
 			init_SFSW(m_mesh);
 
-			for (int i=0; i<m_mesh*m_mesh; i++)
-			{
-				m_windSpeeds_u[i] = 0.0f;
-				m_windSpeeds_v[i] = 0.0f;
-			}
-			//
-			initForces();
+			clearSpeeds();
+			clearForces();
+			addForces(m_init_force);
 		}
 
 		#endregion
@@ -213,6 +209,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			Params.Add("force", "initial force");
 			Params.Add("damping", "damping of force");
 			Params.Add("region", "size of region");
+			Params.Add("rest", "reset wind speed");
 			return Params;
 		}
 
@@ -236,13 +233,20 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				  m_init_force = (int)value;
 				  if (m_init_force<0 || m_init_force>2) m_init_force = 0;
 				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : force = {0}", m_init_force);
-				  Initialise();
+				  clearForces();
+				  addForces(m_init_force);
 				  break;
 
 				case "region":
 				  m_region_size = (((int)Math.Abs(value)+255)/256)*256;
 				  if (m_region_size==0) m_region_size = 256;
 				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : region = {0}", m_region_size);
+				  break;
+
+				case "reset":
+				  m_log.InfoFormat("[SimpleFluidSolverWind] Set Param : reset");
+				  clearSpeeds();
+				  clearForces();
 				  break;
 			}
 		}
@@ -273,20 +277,27 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 		#endregion
 
 
-		//
-		public void initForces()
+		public void clearSpeeds()
+		{
+			for (int i=0; i<m_mesh*m_mesh; i++)
+			{
+				m_windSpeeds_u[i] = 0.0f;
+				m_windSpeeds_v[i] = 0.0f;
+			}
+		}
+
+
+		public void clearForces()
 		{
 			for (int i=0; i<m_mesh*m_mesh; i++)
 			{
 				m_initForces_u[i] = 0.0f; 
 				m_initForces_v[i] = 0.0f; 
 			}
-			//
-			setInitForces(m_init_force);
 		}
 
 
-		private void setInitForces(int init)
+		private void addForces(int init)
 		{
 			int i, j;
 
@@ -301,8 +312,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			else if (init==1) 
 			{
 				for (i=0, j=m_mesh-1; i<m_mesh/3; i++, j--) {
-					m_initForces_u[i + j*m_mesh] += 1.0f + ((float)i) * 0.1f;
-					m_initForces_v[i + j*m_mesh] -= 1.0f + ((float)i) * 0.1f;
+					m_initForces_u[i + j*m_mesh] += 5.0f + ((float)i)*0.5f;
+					m_initForces_v[i + j*m_mesh] -= 5.0f + ((float)i)*0.5f;
 				}
 			}
 
@@ -314,7 +325,6 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					i = m_mesh - m_mesh/10;
 					m_initForces_v[i + j*m_mesh] -= 0.1f;
 				}
-	
 				for (i=m_mesh/10; i<m_mesh-m_mesh/10; i++) {
 					j = m_mesh/10;
 					m_initForces_u[i + j*m_mesh] -= 0.1f;
@@ -323,7 +333,6 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 	
 				float radius = ((float) m_mesh)/4.0f;
-
 				for (float f=0.0f; f<360.0; f+=0.25f) {
 					float angle = f/(2*(float)Math.PI);
 					float x = (float)Math.Sin(angle)*radius;
@@ -334,7 +343,6 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}	
 			}
 		}
-
 
 
 /*
