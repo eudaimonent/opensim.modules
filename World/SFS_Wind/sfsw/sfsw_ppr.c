@@ -146,12 +146,11 @@ void solve_SFSW(int n, float* u, float* v, float* fu, float* fv, int rsize, floa
 
 
 /*
-
 int main()
 {
 	int n = 16;
 
-	init_FFT(n);
+	init_SFSW(n);
 	
 	float* u = (float*)malloc(sizeof(float)*n*n);
 	float* v = (float*)malloc(sizeof(float)*n*n);
@@ -174,16 +173,16 @@ int main()
 
 	int rsize = 256;
 
-	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
+	solve_SFSW(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
+	solve_SFSW(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	stable_solve(16, u, v, fu, fv, rsize, 0.001, 1.0);
+	solve_SFSW(16, u, v, fu, fv, rsize, 0.001, 1.0);
 	printf("A = %f %f\n", u[0], v[0]);
 
-	close_FFT();
+	free_SFSW();
 
 	return 0;
 }
