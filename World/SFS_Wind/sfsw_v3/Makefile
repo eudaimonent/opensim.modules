@@ -1,10 +1,10 @@
 
 
-#all: libsfsw.so sfsw
-all: libsfsw.so
+all: libsfsw.so sfsw
+#all: libsfsw.so
 
 libsfsw.so: sfsw.o
-	gcc sfsw.o -lfftw3 -lm -shared -O2 -o libsfsw.so
+	gcc sfsw.o -lfftw3_threads -lfftw3 -lm -shared -O2 -o libsfsw.so
 	
 sfsw.o: sfsw.c 
 	gcc sfsw.c -fPIC -W -Wall -c
@@ -15,5 +15,5 @@ clean:
 
 
 sfsw: sfsw.o
-	gcc sfsw.o -lm -lfftw3 -O2 -o sfsw
+	gcc sfsw.o -lm -lfftw3_threads -lfftw3 -O2 -o sfsw
 

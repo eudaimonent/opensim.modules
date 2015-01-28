@@ -28,6 +28,10 @@ static double* u0 = NULL;
 static double* v0 = NULL;
 
 
+//
+#define MAX_THREAD_NUM  10
+
+
 
 #define floor(x) ((x)>=0.0 ? ((int)(x)) : (-((int)(1-(x)))))
 
@@ -35,6 +39,9 @@ static double* v0 = NULL;
 
 void init_SFSW(int n)
 {
+	fftw_init_threads();
+	fftw_plan_with_nthreads(MAX_THREAD_NUM);
+
 	cmp_u = (fftw_complex*)malloc(sizeof(fftw_complex)*n*(n/2+1));
 	cmp_v = (fftw_complex*)malloc(sizeof(fftw_complex)*n*(n/2+1));
 
@@ -51,6 +58,7 @@ void init_SFSW(int n)
 
 void free_SFSW(void)
 {
+//	OpenSim のマルチリージョンでセグメンテーションエラー
 	if (plan_rc_u!=NULL) {
 		fftw_destroy_plan(plan_rc_u);
 		plan_rc_u = NULL;
@@ -67,6 +75,8 @@ void free_SFSW(void)
 		fftw_destroy_plan(plan_cr_v);
 		plan_cr_v = NULL;
 	}
+
+	fftw_cleanup_threads();
 
 	//
 	if (cmp_u!=NULL) {
@@ -165,7 +175,6 @@ void solve_SFSW(int n, float* u, float* v, float* fu, float* fv, int rsize, floa
 
 
 
-/*
 int main()
 {
 	int n = 16;
@@ -206,5 +215,4 @@ int main()
 
 	return 0;
 }
-*/
 
