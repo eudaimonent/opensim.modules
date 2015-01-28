@@ -50,15 +50,15 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 		//
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		private extern static void init_FFT(int n);
+		private extern static void init_SFSW(int n);
 
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		private extern static void close_FFT();
+		private extern static void free_SFSW();
 
 		[DllImport("sfsw", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
-		private static extern void stable_solve(int n, [MarshalAs(UnmanagedType.LPArray)] float[] u,  [MarshalAs(UnmanagedType.LPArray)] float[] v, 
-													   [MarshalAs(UnmanagedType.LPArray)] float[] u0, [MarshalAs(UnmanagedType.LPArray)] float[] v0,
-													   int rsize, float visc, float dt);
+		private static extern void solve_SFSW(int n, [MarshalAs(UnmanagedType.LPArray)] float[] u,  [MarshalAs(UnmanagedType.LPArray)] float[] v, 
+													 [MarshalAs(UnmanagedType.LPArray)] float[] u0, [MarshalAs(UnmanagedType.LPArray)] float[] v0,
+													 int rsize, float visc, float dt);
 
 		#region IPlugin Members
 
@@ -75,7 +75,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 		public void Initialise()
 		{
-			init_FFT(m_mesh);
+			init_SFSW(m_mesh);
 
 			for (int i=0; i<m_mesh*m_mesh; i++)
 			{
@@ -102,7 +102,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			m_initForces_u = null;
 			m_initForces_v = null;
 
-			//close_FFT();	// マルチリージョンでセグメンテーションフォルト
+			free_SFSW();
 		}
 
 		#endregion
@@ -152,7 +152,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					m_windForces_v[i] = m_initForces_v[i]*m_strength;
 				}
 
-				stable_solve(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_region_size, 0.001f, 1.0f);
+				solve_SFSW(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_region_size, 0.001f, 1.0f);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
 				//m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
 				//

@@ -1,4 +1,6 @@
 /*
+ * A Simple Fluid Solver Wind
+ *
  * Use FFTW v2.0
  * http://www.fftw.org
  *
@@ -28,7 +30,7 @@ static fftw_real* v0 = NULL;
 
 
 
-void init_FFT(int n)
+void init_SFSW(int n)
 {
 	plan_rc = rfftw2d_create_plan(n, n, FFTW_REAL_TO_COMPLEX, FFTW_OUT_OF_PLACE);
 	plan_cr = rfftw2d_create_plan(n, n, FFTW_COMPLEX_TO_REAL, FFTW_OUT_OF_PLACE);
@@ -41,12 +43,10 @@ void init_FFT(int n)
 }
 
 
-
-
-void close_FFT(void)
+void free_SFSW(void)
 {
-	rfftwnd_destroy_plan(plan_rc);	// OpenSim のマルチリージョンで終了時にエラー
-	rfftwnd_destroy_plan(plan_cr);
+//	rfftwnd_destroy_plan(plan_rc);	// OpenSim のマルチリージョンで終了時にエラー
+//	rfftwnd_destroy_plan(plan_cr);
 
 	//
 	if (cmp_u!=NULL) {
@@ -69,8 +69,7 @@ void close_FFT(void)
 }
 
 
-
-void stable_solve(int n, float* u, float* v, float* fu, float* fv, int rsize, float visc, float dt)
+void solve_SFSW(int n, float* u, float* v, float* fu, float* fv, int rsize, float visc, float dt)
 {
 	fftw_real x, y, x0, y0, f, r, U[2], V[2], s, t;
 	int i, j, i0, j0, i1, j1;
