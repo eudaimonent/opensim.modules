@@ -58,7 +58,6 @@ void init_SFSW(int n)
 
 void free_SFSW(void)
 {
-//	OpenSim のマルチリージョンでセグメンテーションエラー
 	if (plan_rc_u!=NULL) {
 		fftw_destroy_plan(plan_rc_u);
 		plan_rc_u = NULL;
@@ -175,6 +174,7 @@ void solve_SFSW(int n, float* u, float* v, float* fu, float* fv, int rsize, floa
 
 
 
+/*
 int main()
 {
 	int n = 16;
@@ -215,4 +215,4 @@ int main()
 
 	return 0;
 }
-
+*/

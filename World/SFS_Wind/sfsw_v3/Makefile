@@ -1,7 +1,7 @@
 
 
-all: libsfsw.so sfsw
-#all: libsfsw.so
+#all: libsfsw.so sfsw
+all: libsfsw.so
 
 libsfsw.so: sfsw.o
 	gcc sfsw.o -lfftw3_threads -lfftw3 -lm -shared -O2 -o libsfsw.so
