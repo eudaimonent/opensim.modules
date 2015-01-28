@@ -9,3 +9,4 @@ rm -f bin/*.dll
 (cd Profile && ./clean.sh)
 (cd Search && ./clean.sh)
 (cd Physics && ./clean.sh)
+(cd World && ./clean.sh)
