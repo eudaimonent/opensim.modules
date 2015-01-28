@@ -10,4 +10,4 @@ rm -f  Modules/*.csproj*
 rm -rf Modules/bin
 rm -rf Modules/obj
 
-(cd sfsw; make clean)
+(cd sfsw; make clean >/devnull 2>&1)
