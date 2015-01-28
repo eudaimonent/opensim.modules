@@ -9,3 +9,5 @@ rm -f  Modules/*.build
 rm -f  Modules/*.csproj*
 rm -rf Modules/bin
 rm -rf Modules/obj
+
+(cd sfsw; make clean)
