@@ -149,9 +149,10 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 				}
 
 				solve_SFSW(m_mesh, m_windSpeeds_u, m_windSpeeds_v, m_windForces_u, m_windForces_v, m_region_size, 0.001f, 1.0f);
-				//m_log.InfoFormat("[SimpleFluidSolverWind] ZeroPt Strength : {0} {1}", m_windSpeeds_u[0], m_windSpeeds_v[0]);
-				//m_log.InfoFormat("[SimpleFluidSolverWind] Center Strength : {0} {1}", m_windSpeeds_u[m_mesh*m_mesh/2], m_windSpeeds_v[m_mesh*m_mesh/2]);
-				//
+				//int center = m_mesh*m_mesh/2;
+				//m_log.InfoFormat("====>: ({0} {1}) ({2} {3})", m_windSpeeds_u[0], m_windSpeeds_v[0], m_windSpeeds_u[center], m_windSpeeds_v[center]);
+
+				//float energy = 0.0f;
 				for (int i=0; i<m_mesh*m_mesh; i++)
 				{
 					m_windSpeeds[i].X = m_windSpeeds_u[i];
@@ -159,7 +160,10 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					//
 					m_initForces_u[i] *= m_damping_rate;
 					m_initForces_v[i] *= m_damping_rate;
+
+					//energy += m_windSpeeds_u[i]*m_windSpeeds_u[i] + m_windSpeeds_v[i]*m_windSpeeds_v[i];
 				}
+				//m_log.InfoFormat("Energy = {0}", energy);
 			}
 		}
 
