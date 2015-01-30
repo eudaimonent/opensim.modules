@@ -18,14 +18,13 @@ cd SFS_Wind$VER
 xbuild
 cd ..
 
-
 cd sfsw
 make
 cp -f libsfsw.so ../bin
 
 cd ..
 cp -f ./bin/$DLL ../../bin || exit 1
-cp -f sfsw/libsfsw.so ../../bin || exit 1
+cp -f ./bin/libsfsw.so ../../bin || exit 1
 cp -f conf/sfsw.dll.config ../../bin || exit 1
 
 echo
