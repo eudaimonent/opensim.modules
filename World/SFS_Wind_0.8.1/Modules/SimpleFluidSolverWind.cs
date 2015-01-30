@@ -316,6 +316,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 			else if (init==1) 
 			{
 				for (i=0, j=m_mesh-1; i<m_mesh/3; i++, j--) {
+					//m_initForces_u[i + j*m_mesh] += 5.0f + ((float)i)*0.5f;
+					//m_initForces_v[i + j*m_mesh] -= 5.0f + ((float)i)*0.5f;
 					m_initForces_u[i + j*m_mesh] += 5.0f + ((float)i)*0.5f;
 					m_initForces_v[i + j*m_mesh] -= 5.0f + ((float)i)*0.5f;
 				}
@@ -323,6 +325,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 
 			else if (init==2) 
 			{
+/*
 				for (j=m_mesh/10; j<m_mesh-m_mesh/10; j++) {
 					i = m_mesh/10;
 					m_initForces_v[i + j*m_mesh] += 0.1f;
@@ -335,6 +338,7 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					j = m_mesh-m_mesh/10;
 					m_initForces_u[i + j*m_mesh] += 0.1f;
 				}
+*/
 	
 				float radius = ((float) m_mesh)/4.0f;
 				for (float f=0.0f; f<360.0; f+=0.25f) {
@@ -342,8 +346,8 @@ namespace OpenSim.Region.CoreModules.World.Wind.Plugins
 					float x = (float)Math.Sin(angle)*radius;
 					float y = (float)Math.Cos(angle)*radius;
 					//
-					m_initForces_u[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] -= (float)Math.Cos(angle)*0.1f;
-					m_initForces_v[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] += (float)Math.Sin(angle)*0.1f;	  
+					m_initForces_u[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] -= (float)Math.Sin(angle)*0.1f;
+					m_initForces_v[(m_mesh/2+(int)Math.Floor(x)) + (m_mesh/2+(int)Math.Floor(y))*m_mesh] += (float)Math.Cos(angle)*0.1f;	  
 				}	
 			}
 		}
