@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DLL=OpenSimProfile.Modules.dll
+DLL="SimpleFluidSolverWind.dll"
 
 VER=""
 if [ "$1" != "" ]; then
@@ -16,26 +16,16 @@ echo "=========================="
 cd SFS_Wind$VER
 ./runprebuild.sh
 xbuild
-
-cp -f ../bin/$DLL ../../bin || exit 1
-
-echo
-
-#!/bin/sh
-
-./clean.sh
-./runprebuild.sh
-xbuild
-
-#cp -f ../bin/$DLL ../../bin || exit 1
-
-echo
-cd sfsw
-make clean
-make
-cp -f libsfsw.so ../../bin
 cd ..
 
-echo
-cp -f sfsw.dll.config ../bin
 
+cd sfsw
+make
+cp -f libsfsw.so ../bin
+
+cd ..
+cp -f ./bin/$DLL ../../bin || exit 1
+cp -f sfsw/libsfsw.so ../../bin || exit 1
+cp -f conf/sfsw.dll.config ../../bin || exit 1
+
+echo

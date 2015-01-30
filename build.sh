@@ -35,6 +35,10 @@ cd Physics
 #./build.sh $VER || exit 1
 cd ..
 
+# World
+cd World
+./build.sh $VER || exit 1
+cd ..
 
 #
 cp bin/*.dll ../bin || exit 1
