@@ -10,6 +10,6 @@ CREATE TABLE `mute_list` (
     `muteFlags`     int(10) unsigned NOT NULL default '0',
     `timestamp`     int(11) unsigned NOT NULL default '0',
     PRIMARY KEY  (`AgentID`,`MuteID`,`MuteName`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 
